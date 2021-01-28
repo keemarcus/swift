@@ -14,7 +14,7 @@
   <script>
   $( function() {
     $( "table" ).sortable({
-        items: "tr:not(.ui-state-disabled)",
+        items: "tr:not(.no-sort)",
     });
   } );
   </script>

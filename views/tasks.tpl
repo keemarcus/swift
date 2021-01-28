@@ -177,7 +177,7 @@ function display_task(x) {
   arrow = (x.list == "today") ? "arrow_forward" : "arrow_back";
   completed = x.completed ? " completed" : "";
   if ((x.id == "today") | (x.id == "tomorrow")) {
-    t = '<tr id="task-'+x.id+'" class="task ui-state-disabled">' +
+    t = '<tr id="task-'+x.id+'" class="task no-sort">' +
         '  <td style="width:36px"></td>' +  
         '  <td><span id="editor-'+x.id+'">' + 
         '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
