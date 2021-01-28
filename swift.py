@@ -1,5 +1,8 @@
 # SWIFT Taskbook
-# Web Application for Task Management 
+# Web Application for Task Management
+
+# system libraries
+import os
 
 # web transaction objects
 from bottle import request, response
@@ -10,8 +13,15 @@ from bottle import route, get, put, post, delete
 # web page template processor
 from bottle import template
 
+VERSION=0.1
+
 # development server
-from bottle import run 
+PYTHONANYWHERE = ("PYTHONANYWHERE_SITE" in os.environ)
+
+if PYTHONANYWHERE:
+    from bottle import default_app
+else:
+    from bottle import run
 
 # ---------------------------
 # web application routes
@@ -20,25 +30,29 @@ from bottle import run
 @route('/')
 @route('/tasks')
 def tasks():
-    return template("tasks.tpl") 
+    return template("tasks.tpl")
 
 @route('/login')
 def login():
-    return template("login.tpl") 
+    return template("login.tpl")
 
 @route('/register')
 def login():
-    return template("register.tpl") 
+    return template("register.tpl")
 
 # ---------------------------
-# task REST api 
+# task REST api
 # ---------------------------
 
 import json
 import dataset
 import time
 
-taskbook_db = dataset.connect('sqlite:///taskbook.db')  
+taskbook_db = dataset.connect('sqlite:///taskbook.db')
+
+@get('/api/version')
+def get_version():
+    return { "version":VERSION }
 
 @get('/api/tasks')
 def get_tasks():
@@ -94,7 +108,7 @@ def update_task():
     except Exception as e:
         response.status="400 Bad Request:"+str(e)
         return
-    if 'list' in data: 
+    if 'list' in data:
         data['time'] = time.time()
     try:
         task_table = taskbook_db.get_table('task')
@@ -125,6 +139,8 @@ def delete_task():
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'success': True})
 
-if __name__ == "__main__":
-
-    run(host='localhost', port=8080, debug=True)
+if PYTHONANYWHERE:
+    application = default_app()
+else:
+   if __name__ == "__main__":
+       run(host='localhost', port=8080, debug=True)
