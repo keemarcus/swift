@@ -184,7 +184,7 @@ function display_task(x) {
         '        <form>' +
         '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
         '             type="text" autofocus placeholder="Add new task..."/>'+
-        '         </form>'
+        '         </form>' +
         '      </span>' + 
         '  </td>' +
         '  <td style="width:72px">' +
