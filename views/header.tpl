@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+  <!-- Necessary resources for webpage to work -->
+
   <title>SWIFT Taskbook</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,6 +21,16 @@
         placeholder: "placeholder",
     });
   } );
+  
+  $(document).ready(function() {
+    $('input').keyup(function(event) {
+      if (event.which === 13) {
+        event.preventDefault();
+        $('form').submit();
+      }
+    });
+  });
+
   </script>
 
 </head>
