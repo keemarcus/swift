@@ -181,8 +181,10 @@ function display_task(x) {
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
         '  <td style="width:36px"></td>' +  
         '  <td><span id="editor-'+x.id+'">' + 
-        '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
-        '          type="text" autofocus placeholder="Add new task..."/>'+
+        '        <form>' +
+        '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
+        '             type="text" autofocus placeholder="Add new task..."/>'+
+        '         </form>'
         '      </span>' + 
         '  </td>' +
         '  <td style="width:72px">' +
