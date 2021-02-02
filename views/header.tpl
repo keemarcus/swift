@@ -14,7 +14,7 @@
   <script>
   $( function() {
     $( "table" ).sortable({
-        items: "tr",
+        items: "tr:not(.no-sort)",
     });
   } );
   </script>
