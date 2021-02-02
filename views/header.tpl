@@ -15,6 +15,7 @@
   $( function() {
     $( "table" ).sortable({
         items: "tr:not(.no-sort)",
+        placeholder: "placeholder",
     });
   } );
   </script>

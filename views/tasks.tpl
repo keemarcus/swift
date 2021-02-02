@@ -7,6 +7,7 @@
   }
   .completed {text-decoration: line-through;}
   .description { padding-left:8px }
+  .placeholder { border: 1px solid black }
 </style>
 
 <div class="w3-row">
