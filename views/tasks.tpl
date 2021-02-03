@@ -2,12 +2,13 @@
 % include("banner.tpl")
 
 <style>
-  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task {
+  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task {
     cursor: pointer;
   }
   .completed {text-decoration: line-through;}
   .description { padding-left:8px }
   .placeholder { border: 1px solid black }
+  td {white-space: nowrap}
 </style>
 
 <div class="w3-row">
@@ -206,6 +207,7 @@ function display_task(x) {
         '    <span id="delete_task-'+x.id+'" class="delete_task material-icons">delete</span>' +
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
         '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
+        '    <span id="prio_task" class="prio_task material-icons">crop_portrait</span>' +
         '  </td>' +
         '</tr>';
   }
@@ -227,6 +229,13 @@ function get_current_tasks() {
     // wire the response events 
     $(".move_task").click(move_task);
     $(".description").click(complete_task)
+    $(".prio_task").click(function(){
+      if ($(this).text() == 'crop_portrait'){
+        $(this).text('priority_high');
+      } else {
+        $(this).text('crop_portrait')
+      }
+    }); 
     $(".edit_task").click(edit_task);
     $(".save_edit").click(save_edit);
     $(".undo_edit").click(undo_edit);
