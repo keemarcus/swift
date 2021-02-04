@@ -90,7 +90,39 @@ function move_task(event) {
   if ($("#current_input").val() != "") { return }
   console.log("move item", event.target.id )
   id = event.target.id.replace("move_task-","");
-  target_list = event.target.className.search("today") > 0 ? "tomorrow" : "today";
+  if(event.target.className.search("today") > 0) 
+  {
+    if(target_list = event.target.className.search("1") > 0)
+    {
+      target_list = "later";
+    }
+    else
+    {
+      target_list = "tomorrow";
+    }
+  }
+  else if(event.target.className.search("tomorrow") > 0)
+  {
+    if(target_list = event.target.className.search("1") > 0)
+    {
+      target_list = "today";
+    }
+    else
+    {
+      target_list = "later";  
+    }
+  }
+  else
+  {
+    if(target_list = event.target.className.search("1") > 0)
+    {
+      target_list = "tomorrow";
+    }
+    else
+    {
+      target_list = "today";
+    }
+  }
   api_update_task({'id':id, 'list':target_list},
                   function(result) { 
                     console.log(result);
@@ -183,11 +215,26 @@ function delete_task(event) {
 }
 
 function display_task(x) {
-  arrow = (x.list == "today") ? "arrow_forward" : "arrow_back";
+  switch(x.list) {
+  case "today":
+    arrow1 = "arrow_forward";
+    arrow2 = "chevron_right";
+    break;
+  case "tomorrow":
+    arrow1 = "chevron_left";
+    arrow2 = "chevron_right";
+    break;
+  case "later":
+    arrow1 = "chevron_left";
+    arrow2 = "arrow_back";
+    break;
+  default:
+    break;
+  }
   completed = x.completed ? " completed" : "";
   if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
-        '  <td style="width:36px"></td>' +  
+        '  <td colspan="2"></td>' +  
         '  <td><span id="editor-'+x.id+'">' + 
         '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" ' + 
         '          type="text" autofocus placeholder="Add an item..."/>'+
@@ -201,7 +248,8 @@ function display_task(x) {
         '</tr>';
   } else {
     t = '<tr id="task-'+x.id+'" class="task">' + 
-        '  <td><span id="move_task-'+x.id+'" class="move_task '+x.list+' material-icons">' + arrow + '</span></td>' +
+        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
+        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
         '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span>' + 
         '      <span id="editor-'+x.id+'" hidden>' + 
         '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/>' +
