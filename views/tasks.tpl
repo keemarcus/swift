@@ -92,36 +92,15 @@ function move_task(event) {
   id = event.target.id.replace("move_task-","");
   if(event.target.className.search("today") > 0) 
   {
-    if(target_list = event.target.className.search("1") > 0)
-    {
-      target_list = "later";
-    }
-    else
-    {
-      target_list = "tomorrow";
-    }
+    target_list = event.target.className.search("1") > 0 ? "later" : "tomorrow";
   }
   else if(event.target.className.search("tomorrow") > 0)
   {
-    if(target_list = event.target.className.search("1") > 0)
-    {
-      target_list = "today";
-    }
-    else
-    {
-      target_list = "later";  
-    }
+    target_list = event.target.className.search("1") > 0 ? "today" : "later";
   }
   else
   {
-    if(target_list = event.target.className.search("1") > 0)
-    {
-      target_list = "tomorrow";
-    }
-    else
-    {
-      target_list = "today";
-    }
+    target_list = event.target.className.search("1") > 0 ? "tomorrow" : "today";
   }
   api_update_task({'id':id, 'list':target_list},
                   function(result) { 
