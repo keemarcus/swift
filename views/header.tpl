@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+  <!-- Necessary resources for webpage to work -->
+
   <title>SWIFT Taskbook</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +20,7 @@
         items: "tr:not(.no-sort)",
         placeholder: "placeholder",
     });
-  } );
+  });
   </script>
 
 </head>

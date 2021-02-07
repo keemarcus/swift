@@ -2,12 +2,13 @@
 % include("banner.tpl")
 
 <style>
-  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task {
+  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task {
     cursor: pointer;
   }
   .completed {text-decoration: line-through;}
   .description { padding-left:8px }
   .placeholder { border: 1px solid black }
+  td {white-space: nowrap}
 </style>
 
 <div class="w3-row">
@@ -211,12 +212,16 @@ function display_task(x) {
     break;
   }
   completed = x.completed ? " completed" : "";
+  prio = x.prio ? "priority_high" : "crop_portrait";
   if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
+
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
         '  <td colspan="2"></td>' +  
         '  <td><span id="editor-'+x.id+'">' + 
-        '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" ' + 
-        '          type="text" autofocus placeholder="Add an item..."/>'+
+        '        <form>' +
+        '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
+        '             type="text" autofocus placeholder="Add new task..."/>'+
+        '         </form>' +
         '      </span>' + 
         '  </td>' +
         '  <td style="width:72px">' +
@@ -239,11 +244,25 @@ function display_task(x) {
         '    <span id="delete_task-'+x.id+'" class="delete_task material-icons">delete</span>' +
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
         '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
+        '    <span id="prio_task-'+x.id+'" class="material-icons prio_task ">' + prio + '</span>' +
         '  </td>' +
         '</tr>';
   }
   $("#task-list-" + x.list).append(t);
   $("#current_input").val("")
+}
+
+function prio_task(event) {
+  if ($("#current_input").val() != "") { return }
+  console.log("toggle prio for item", event.target.id )
+  id = event.target.id.replace("prio_task-","");
+  prio = event.target.innerHTML == "priority_high";
+  console.log("updating :",{'id':id, 'prio':prio==false})
+  api_update_task({'id':id, 'prio':prio==false}, 
+                  function(result) { 
+                    console.log(result);
+                    get_current_tasks();
+                  } );
 }
 
 function get_current_tasks() {
@@ -261,6 +280,7 @@ function get_current_tasks() {
     // wire the response events 
     $(".move_task").click(move_task);
     $(".description").click(complete_task)
+    $(".prio_task").click(prio_task);
     $(".edit_task").click(edit_task);
     $(".save_edit").click(save_edit);
     $(".undo_edit").click(undo_edit);
