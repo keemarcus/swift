@@ -12,7 +12,7 @@
 </style>
 
 <div class="w3-row">
-  <div class="w3-col s6 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
+  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
     <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
       <h1><i>Today</i></h1>
     </div>
@@ -20,11 +20,19 @@
     </table>
     <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
-  <div class="w3-col s6 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
+  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
     <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
       <h1><i>Tomorrow</i></h1>
     </div>
     <table  id="task-list-tomorrow" class="w3-table">
+    </table>
+    <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
+  </div>
+  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
+    <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
+      <h1><i>Later</i></h1>
+    </div>
+    <table id="task-list-later" class="w3-table">
     </table>
     <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
@@ -83,7 +91,18 @@ function move_task(event) {
   if ($("#current_input").val() != "") { return }
   console.log("move item", event.target.id )
   id = event.target.id.replace("move_task-","");
-  target_list = event.target.className.search("today") > 0 ? "tomorrow" : "today";
+  if(event.target.className.search("today") > 0) 
+  {
+    target_list = event.target.className.search("1") > 0 ? "later" : "tomorrow";
+  }
+  else if(event.target.className.search("tomorrow") > 0)
+  {
+    target_list = event.target.className.search("1") > 0 ? "today" : "later";
+  }
+  else
+  {
+    target_list = event.target.className.search("1") > 0 ? "tomorrow" : "today";
+  }
   api_update_task({'id':id, 'list':target_list},
                   function(result) { 
                     console.log(result);
@@ -127,7 +146,7 @@ function save_edit(event) {
   console.log("save item", event.target.id)
   id = event.target.id.replace("save_edit-","");
   console.log("desc to save = ",$("#input-" + id).val())
-  if ((id != "today") & (id != "tomorrow")) {
+  if ((id != "today") & (id != "tomorrow") & (id != "later")) {
     api_update_task({'id':id, description:$("#input-" + id).val()},
                     function(result) { 
                       console.log(result);
@@ -148,7 +167,7 @@ function undo_edit(event) {
   id = event.target.id.replace("undo_edit-","")
   console.log("undo",[id])
   $("#input-" + id).val("");
-  if ((id != "today") & (id != "tomorrow")) {
+  if ((id != "today") & (id != "tomorrow") & (id != "later")) {
     // hide the editor
     $("#editor-"+id).prop('hidden', true);
     $("#save_edit-"+id).prop('hidden', true);
@@ -176,12 +195,28 @@ function delete_task(event) {
 }
 
 function display_task(x) {
-  arrow = (x.list == "today") ? "arrow_forward" : "arrow_back";
+  switch(x.list) {
+  case "today":
+    arrow1 = "arrow_forward";
+    arrow2 = "chevron_right";
+    break;
+  case "tomorrow":
+    arrow1 = "chevron_left";
+    arrow2 = "chevron_right";
+    break;
+  case "later":
+    arrow1 = "chevron_left";
+    arrow2 = "arrow_back";
+    break;
+  default:
+    break;
+  }
   completed = x.completed ? " completed" : "";
   prio = x.prio ? "priority_high" : "crop_portrait";
-  if ((x.id == "today") | (x.id == "tomorrow")) {
+  if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
+
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
-        '  <td style="width:36px"></td>' +  
+        '  <td colspan="2"></td>' +  
         '  <td><span id="editor-'+x.id+'">' + 
         '        <form>' +
         '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
@@ -197,7 +232,8 @@ function display_task(x) {
         '</tr>';
   } else {
     t = '<tr id="task-'+x.id+'" class="task">' + 
-        '  <td><span id="move_task-'+x.id+'" class="move_task '+x.list+' material-icons">' + arrow + '</span></td>' +
+        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
+        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
         '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span>' + 
         '      <span id="editor-'+x.id+'" hidden>' + 
         '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/>' +
@@ -235,6 +271,7 @@ function get_current_tasks() {
   // display the new task editor
   display_task({id:"today", list:"today"})
   display_task({id:"tomorrow", list:"tomorrow"})
+  display_task({id:"later", list:"later"})
   // display the tasks
   api_get_tasks(function(result){
     for (const task of result.tasks) {
