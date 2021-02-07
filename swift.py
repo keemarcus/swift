@@ -13,6 +13,9 @@ from bottle import route, get, put, post, delete
 # web page template processor
 from bottle import template
 
+# display static image
+from bottle import static_file
+
 VERSION=0.1
 
 # development server
@@ -32,12 +35,17 @@ else:
 def tasks():
     return template("tasks.tpl")
 
+
+@route('/static/<filename>')
+def serve_static(filename):
+    return static_file(filename, root='./assets/logo')
+
 @route('/login')
 def login():
     return template("login.tpl")
 
 @route('/register')
-def login():
+def register():
     return template("register.tpl")
 
 # ---------------------------
