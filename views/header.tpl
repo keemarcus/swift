@@ -20,17 +20,7 @@
         items: "tr:not(.no-sort)",
         placeholder: "placeholder",
     });
-  } );
-  
-  $(document).ready(function() {
-    $('input').keyup(function(event) {
-      if (event.which === 13) {
-        event.preventDefault();
-        $('form').submit();
-      }
-    });
   });
-
   </script>
 
 </head>
