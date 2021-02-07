@@ -178,6 +178,7 @@ function delete_task(event) {
 function display_task(x) {
   arrow = (x.list == "today") ? "arrow_forward" : "arrow_back";
   completed = x.completed ? " completed" : "";
+  prio = x.prio ? "priority_high" : "crop_portrait";
   if ((x.id == "today") | (x.id == "tomorrow")) {
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
         '  <td style="width:36px"></td>' +  
@@ -207,12 +208,25 @@ function display_task(x) {
         '    <span id="delete_task-'+x.id+'" class="delete_task material-icons">delete</span>' +
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
         '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
-        '    <span id="prio_task" class="prio_task material-icons">crop_portrait</span>' +
+        '    <span id="prio_task-'+x.id+'" class="material-icons prio_task ">' + prio + '</span>' +
         '  </td>' +
         '</tr>';
   }
   $("#task-list-" + x.list).append(t);
   $("#current_input").val("")
+}
+
+function prio_task(event) {
+  if ($("#current_input").val() != "") { return }
+  console.log("toggle prio for item", event.target.id )
+  id = event.target.id.replace("prio_task-","");
+  prio = event.target.innerHTML == "priority_high";
+  console.log("updating :",{'id':id, 'prio':prio==false})
+  api_update_task({'id':id, 'prio':prio==false}, 
+                  function(result) { 
+                    console.log(result);
+                    get_current_tasks();
+                  } );
 }
 
 function get_current_tasks() {
@@ -229,13 +243,7 @@ function get_current_tasks() {
     // wire the response events 
     $(".move_task").click(move_task);
     $(".description").click(complete_task)
-    $(".prio_task").click(function(){
-      if ($(this).text() == 'crop_portrait'){
-        $(this).text('priority_high');
-      } else {
-        $(this).text('crop_portrait')
-      }
-    }); 
+    $(".prio_task").click(prio_task);
     $(".edit_task").click(edit_task);
     $(".save_edit").click(save_edit);
     $(".undo_edit").click(undo_edit);
