@@ -72,7 +72,7 @@ def create_task():
             assert key in ["description","list"], f"Illegal key '{key}'"
         assert type(data['description']) is str, "Description is not a string."
         assert len(data['description'].strip()) > 0, "Description is length zero."
-        assert data['list'] in ["today","tomorrow"], "List must be 'today' or 'tomorrow'"
+        assert data['list'] in ["today","tomorrow","later"], "List must be 'today', 'tomorrow', or 'later'"
     except Exception as e:
         response.status="400 Bad Request:"+str(e)
         return
@@ -104,7 +104,7 @@ def update_task():
         if "completed" in request:
             assert type(data['completed']) is bool, "Completed is not a bool."
         if "list" in request:
-            assert data['list'] in ["today","tomorrow"], "List must be 'today' or 'tomorrow'"
+            assert data['list'] in ["today","tomorrow","later"], "List must be 'today', 'tomorrow', or 'later'"
     except Exception as e:
         response.status="400 Bad Request:"+str(e)
         return
