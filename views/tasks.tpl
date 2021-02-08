@@ -134,6 +134,7 @@ function edit_task(event) {
   $("#description-"+id).prop('hidden', true);
   $("#edit_task-"+id).prop('hidden', true);
   $("#delete_task-"+id).prop('hidden', true);
+  $("#prio_task-"+id).prop('hidden', true)
   // show the editor
   $("#editor-"+id).prop('hidden', false);
   $("#save_edit-"+id).prop('hidden', false);
