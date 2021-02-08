@@ -60,7 +60,7 @@ def get_tasks():
     response.headers['Content-Type'] = 'application/json'
     response.headers['Cache-Control'] = 'no-cache'
     task_table = taskbook_db.get_table('task')
-    tasks = [dict(x) for x in task_table.find(order_by='time')]
+    tasks = [dict(x) for x in task_table.find(order_by='order')]
     return { "tasks": tasks }
 
 @post('/api/tasks')
@@ -97,7 +97,7 @@ def update_task():
     try:
         data = request.json
         for key in data.keys():
-            assert key in ["id","description","completed","list","prio"], f"Illegal key '{key}'"
+            assert key in ["id","description","completed","list","prio","order"], f"Illegal key '{key}'"
         assert type(data['id']) is int, f"id '{id}' is not int"
         if "description" in request:
             assert type(data['description']) is str, "Description is not a string."
@@ -108,6 +108,8 @@ def update_task():
             assert data['list'] in ["today","tomorrow","later"], "List must be 'today', 'tomorrow', or 'later'"
         if "prio" in request:
             assert type(data['prio']) is bool, "Prio is not a bool"
+        if "order" in request:
+            assert type(data['order']) is int, "Order is not an int"
     except Exception as e:
         response.status="400 Bad Request:"+str(e)
         return

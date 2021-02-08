@@ -16,9 +16,25 @@
   
   <script>
   $( function() {
-    $( "table" ).sortable({
-        items: "tr:not(.no-sort)",
-        placeholder: "placeholder",
+    $( "table" ).sortable(
+    {
+      items: "tr:not(.no-sort)",
+      placeholder: "placeholder",
+      stop: function update_order(event) 
+      {
+	      var newOrder = $(this).sortable( "toArray" );
+        var i = 0;
+        newOrder.forEach(function(order) 
+        {
+          console.log("updating order for task:", order, " => ", i); 
+          var id = order.replace("task-","");
+          api_update_task({'id':id, 'order':i}, 
+                  function(result) { 
+                    console.log(result);
+                  } );
+          i++;
+        });
+	    }
     });
   });
   </script>
