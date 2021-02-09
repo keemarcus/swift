@@ -16,7 +16,7 @@
     <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
       <h1><i>Today</i></h1>
     </div>
-    <table id="task-list-today" class="w3-table">
+    <table id="task-list-today" class="w3-table tasks">
     </table>
     <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
@@ -24,7 +24,7 @@
     <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
       <h1><i>Tomorrow</i></h1>
     </div>
-    <table  id="task-list-tomorrow" class="w3-table">
+    <table  id="task-list-tomorrow" class="w3-table tasks">
     </table>
     <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
@@ -32,7 +32,7 @@
     <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
       <h1><i>Later</i></h1>
     </div>
-    <table id="task-list-later" class="w3-table">
+    <table id="task-list-later" class="w3-table tasks">
     </table>
     <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>

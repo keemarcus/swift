@@ -13,7 +13,6 @@ from bottle import route, get, put, post, delete
 # web page template processor
 from bottle import template
 
-
 from bottle import static_file
 
 VERSION=0.1
@@ -34,7 +33,6 @@ else:
 @route('/tasks')
 def tasks():
     return template("tasks.tpl")
-
 
 @route('/static/<filename>')
 def serve_static(filename):
