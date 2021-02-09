@@ -13,6 +13,7 @@ from bottle import route, get, put, post, delete
 # web page template processor
 from bottle import template
 
+# display static image
 from bottle import static_file
 
 VERSION=0.1
