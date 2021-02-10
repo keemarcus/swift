@@ -2,7 +2,7 @@
 % include("banner.tpl")
 
 <style>
-  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task {
+  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task, .sub_task {
     cursor: pointer;
   }
   .completed {text-decoration: line-through;}
@@ -214,6 +214,7 @@ function display_task(x) {
   }
   completed = x.completed ? " completed" : "";
   prio = x.prio ? "priority_high" : "crop_portrait";
+  sub = x.sub ? "expand_less" : "expand_more";
   if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
 
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
@@ -245,7 +246,8 @@ function display_task(x) {
         '    <span id="delete_task-'+x.id+'" class="delete_task material-icons">delete</span>' +
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
         '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
-        '    <span id="prio_task-'+x.id+'" class="material-icons prio_task ">' + prio + '</span>' +
+        '    <span id="prio_task-'+x.id+'" class="prio_task material-icons">' + prio + '</span>' +
+        '    <span id="sub_task-'+x.id+'" class="sub_task material-icons">' + sub + '</span>' +
         '  </td>' +
         '</tr>';
   }
@@ -264,6 +266,20 @@ function prio_task(event) {
                     console.log(result);
                     get_current_tasks();
                   } );
+}
+
+function sub_task(event) {
+  if ($("#current_input").val() != "") { return }
+  console.log("Creating subtask: ", event.target.id)
+  id = event.target.id.replace("sub_task-","");
+  sub = event.target.innerHTML == "expand_less";
+  console.log("updating :",{'id':id, 'sub':sub==false})
+  api_update_task({'id':id, 'sub':sub==false}, 
+                  function(result) { 
+                    console.log(result);
+                    get_current_tasks();
+                  } );
+
 }
 
 function get_current_tasks() {
@@ -286,6 +302,7 @@ function get_current_tasks() {
     $(".save_edit").click(save_edit);
     $(".undo_edit").click(undo_edit);
     $(".delete_task").click(delete_task);
+    $(".sub_task").click(sub_task);
     // set all inputs to set flag
     $("input").keypress(input_keypress);
   });
