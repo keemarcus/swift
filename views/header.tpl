@@ -41,6 +41,7 @@
                   } );
           i++;
         });
+        get_current_tasks();
 	    }
     });
   });
