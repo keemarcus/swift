@@ -269,6 +269,7 @@ function prio_task(event) {
                     console.log(result);
                     get_current_tasks();
                   } );
+
 }
 
 function show_sub_task(event) {
@@ -283,7 +284,44 @@ function show_sub_task(event) {
                     console.log(result);
                     get_current_tasks();
                   } );
+  if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later") & (x.showsub == "")) {
+
+    t = '<tr id="task-'+x.id+'" class="task no-sort">' +
+        '  <td colspan="2"></td>' +  
+        '  <td><span id="editor-'+x.id+'">' + 
+        '        <form>' +
+        '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
+        '             type="text" autofocus placeholder="Add new task..."/>'+
+        '         </form>' +
+        '      </span>' + 
+        '  </td>' +
+        '  <td style="width:72px">' +
+        '    <span id="filler-'+x.id+'" class="material-icons">more_horiz</span>' + 
+        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
+        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
+        '  </td>' +
+        '</tr>';
+  } else {
+    t = '<tr id="task-'+x.id+'" class="task">' + 
+        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
+        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
+        '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span>' + 
+        '      <span id="editor-'+x.id+'" hidden>' + 
+        '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/>' +
+        '      </span>' + 
+        '  </td>' +
+        '  <td>' +
+        '    <span id="edit_task-'+x.id+'" class="edit_task '+x.list+' material-icons">edit</span>' +
+        '    <span id="delete_task-'+x.id+'" class="delete_task material-icons">delete</span>' +
+        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
+        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
+        '    <span id="prio_task-'+x.id+'" class="prio_task material-icons">' + prio + '</span>' +
+        '  </td>' +
+        '</tr>';
+  }
   
+  $("#task-list-" + x.list).append(t);
+  $("#current_input").val("");
 }
 
 function get_current_tasks() {
