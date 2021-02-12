@@ -258,12 +258,24 @@ function prio_task(event) {
   console.log("toggle prio for item", event.target.id )
   id = event.target.id.replace("prio_task-","");
   prio = event.target.innerHTML == "priority_high";
-  console.log("updating :",{'id':id, 'prio':prio==false})
-  api_update_task({'id':id, 'prio':prio==false}, 
+  if(!prio)
+  {
+    console.log("updating :",{'id':id, 'prio':prio==false, 'order':0})
+    api_update_task({'id':id, 'prio':prio==false, 'order':0}, 
                   function(result) { 
                     console.log(result);
                     get_current_tasks();
                   } );
+  }
+  else
+  {
+    console.log("updating :",{'id':id, 'prio':prio==false})
+    api_update_task({'id':id, 'prio':prio==false}, 
+                  function(result) { 
+                    console.log(result);
+                    get_current_tasks();
+                  } );
+  }
 }
 
 function get_current_tasks() {

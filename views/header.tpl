@@ -31,7 +31,7 @@
           return;
         console.log("updating order for list:", list); 
         var reorder = $(document.getElementById("task-list-" + list)).sortable( "toArray" );
-        var i = 0;
+        var i = 1;
         reorder.forEach(function(order) 
         {
           var id = order.replace("task-","");
