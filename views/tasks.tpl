@@ -260,23 +260,18 @@ function prio_task(event) {
   prio = event.target.innerHTML == "priority_high";
   if(!prio)
   {
-    console.log("updating :",{'id':id, 'prio':prio==false, 'order':0})
-    api_update_task({'id':id, 'prio':prio==false, 'order':0}, 
-                  function(result) { 
-                    console.log(result);
-                    get_current_tasks();
-                  } );
+    order = 0;
   }
   else
   {
-    order = (this.dataset.order == 0) ? 1 : this.dataset.order;
-    console.log("updating :",{'id':id, 'prio':prio==false, 'order':order})
+    order = (this.dataset.order == 0) ? 1 : this.dataset.order;  
+  }
+  console.log("updating :",{'id':id, 'prio':prio==false, 'order':order})
     api_update_task({'id':id, 'prio':prio==false, 'order':order}, 
                   function(result) { 
                     console.log(result);
                     get_current_tasks();
                   } );
-  }
 }
 
 function get_current_tasks() {
