@@ -77,7 +77,7 @@ def create_task():
     try:
         data = request.json
         for key in data.keys():
-            assert key in ["description","list"], f"Illegal key '{key}'"
+            assert key in ["description","list","parent"], f"Illegal key '{key}'"
         assert type(data['description']) is str, "Description is not a string."
         assert len(data['description'].strip()) > 0, "Description is length zero."
         assert data['list'] in ["today","tomorrow","later"], "List must be 'today', 'tomorrow', or 'later'"
@@ -93,7 +93,7 @@ def create_task():
             "completed":False,
             "prio":False,
             "showsub":False,
-            "parent":""
+            "parent":data['parent']
         })
     except Exception as e:
         response.status="409 Bad Request:"+str(e)
@@ -123,7 +123,7 @@ def update_task():
         if "showsub" in request:
             assert type(data['showsub']) is bool, "showsub is not a bool"
         if "parent" in request:
-            assert type(data['parent']) is str, "parent is not a string."
+            assert type(data['parent']) is int or None, "parent is not an int."
     except Exception as e:
         response.status="400 Bad Request:"+str(e)
         return
