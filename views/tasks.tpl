@@ -132,6 +132,7 @@ function edit_task(event) {
   // hide the text display
   $("#move_task-"+id).prop('hidden', true);
   $("#description-"+id).prop('hidden', true);
+  $("#dates-"+id).prop('hidden', true);
   $("#edit_task-"+id).prop('hidden', true);
   $("#delete_task-"+id).prop('hidden', true);
   $("#prio_task-"+id).prop('hidden', true)
@@ -148,14 +149,14 @@ function save_edit(event) {
   id = event.target.id.replace("save_edit-","");
   console.log("desc to save = ",$("#input-" + id).val())
   if ((id != "today") & (id != "tomorrow") & (id != "later")) {
-    api_update_task({'id':id, description:$("#input-" + id).val(), date:$("#newdate-" + id).val()},
+    api_update_task({'id':id, description:$("#input-" + id).val(), deadline:$("#newdeadline-" + id).val()},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
                       $("#current_input").val("")
                     } );
   } else {
-    api_create_task({description:$("#input-" + id).val(), list:id, date:$("#newdate-" + id).val()},
+    api_create_task({description:$("#input-" + id).val(), list:id, deadline:$("#newdeadline-" + id).val()},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
@@ -176,9 +177,11 @@ function undo_edit(event) {
     // show the text display
     $("#move_task-"+id).prop('hidden', false);
     $("#description-"+id).prop('hidden', false);
+    $("#dates-"+id).prop('hidden', false);
     $("#filler-"+id).prop('hidden', false);
     $("#edit_task-"+id).prop('hidden', false);
     $("#delete_task-"+id).prop('hidden', false);
+    $("#prio_task-"+id).prop('hidden', false);
   }
   // set the editing flag
   $("#current_input").val("")
@@ -222,7 +225,8 @@ function display_task(x) {
         '        <form>' +
         '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
         '             type="text" autofocus placeholder="Add new task..."/>'+
-        '           <input id="newdate-'+x.id+'" style="height:22px" class="w3-input" type="date"/>' +
+        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Deadline:</label>' +
+        '           <input id="newdeadline-'+x.id+'" class="w3-input" type="date" style="display:inline-block; height:10px; width:150px"/></small>' +
         '         </form>' +
         '      </span>' + 
         '  </td>' +
@@ -236,10 +240,12 @@ function display_task(x) {
     t = '<tr id="task-'+x.id+'" class="task">' + 
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
-        '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + x.date + '</span>' + 
+        '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span><br>' +
+        '      <span id="dates-'+x.id+'" class="dates"><small>Created: ' + x.date + ' Deadline: ' + x.deadline + '</small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
-        '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/>' +
-        '        <input id="newdate-'+x.id+'" style="height:22px" class="w3-input" type="date"/>' +
+        '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/><br>' +
+        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Created: ' + x.date + ' Deadline: </label>' +
+        '           <input id="newdeadline-'+x.id+'" class="w3-input" type="date" value="' + x.deadline + '" style="display:inline-block; height:10px; width:150px"/></small>' +
         '      </span>' + 
         '  </td>' +
         '  <td>' +

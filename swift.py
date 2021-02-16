@@ -55,7 +55,7 @@ def login():
 import json
 import dataset
 import time
-import datetime
+from datetime import date
 
 taskbook_db = dataset.connect('sqlite:///taskbook.db')
 
@@ -78,9 +78,10 @@ def create_task():
     try:
         data = request.json
         for key in data.keys():
-            assert key in ["description","list","date"], f"Illegal key '{key}'"
+            assert key in ["description","deadline","list"], f"Illegal key '{key}'"
         assert type(data['description']) is str, "Description is not a string."
         assert len(data['description'].strip()) > 0, "Description is length zero."
+        assert len(data['deadline'].strip()) > 0, "Must enter a deadline."
         assert data['list'] in ["today","tomorrow","later"], "List must be 'today', 'tomorrow', or 'later'"
     except Exception as e:
         response.status="400 Bad Request:"+str(e)
@@ -90,7 +91,8 @@ def create_task():
         task_table.insert({
             "time": time.time(),
             "description":data['description'].strip(),
-            "date":data['date'],
+            "date":date.today(),
+            "deadline":data['deadline'],
             "list":data['list'],
             "completed":False,
             "prio":False
@@ -107,13 +109,13 @@ def update_task():
     try:
         data = request.json
         for key in data.keys():
-            assert key in ["id","description","date","completed","list","prio","order"], f"Illegal key '{key}'"
+            assert key in ["id","description","deadline","completed","list","prio","order"], f"Illegal key '{key}'"
         assert type(data['id']) is int, f"id '{id}' is not int"
         if "description" in request:
             assert type(data['description']) is str, "Description is not a string."
             assert len(data['description'].strip()) > 0, "Description is length zero."
         if "date" in request:
-            assert type(data['date']) is datetime, "Date is not correct format."
+            assert type(data['deadline']) is date, "Date is not correct format."
         if "completed" in request:
             assert type(data['completed']) is bool, "Completed is not a bool."
         if "list" in request:
