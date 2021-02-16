@@ -19,21 +19,29 @@
     $( "table" ).sortable(
     {
       items: "tr:not(.no-sort)",
+      connectWith: ".tasks",
       placeholder: "placeholder",
-      stop: function update_order(event) 
+      update: function(event) 
       {
-	      var newOrder = $(this).sortable( "toArray" );
-        var i = 0;
-        newOrder.forEach(function(order) 
+	      list = this.id.replace("task-list-","");
+	    },
+      stop: function(event) 
+      {
+        if(typeof list == 'undefined')
+          return;
+        console.log("updating order for list:", list); 
+        var reorder = $(document.getElementById("task-list-" + list)).sortable( "toArray" );
+        var i = 1;
+        reorder.forEach(function(order) 
         {
-          console.log("updating order for task:", order, " => ", i); 
           var id = order.replace("task-","");
-          api_update_task({'id':id, 'order':i}, 
+          api_update_task({'id':id, 'list':list, 'order':i}, 
                   function(result) { 
                     console.log(result);
                   } );
           i++;
         });
+        get_current_tasks();
 	    }
     });
   });

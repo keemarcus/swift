@@ -16,7 +16,7 @@
     <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
       <h1><i>Today</i></h1>
     </div>
-    <table id="task-list-today" class="w3-table">
+    <table id="task-list-today" class="w3-table tasks">
     </table>
     <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
@@ -24,7 +24,7 @@
     <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
       <h1><i>Tomorrow</i></h1>
     </div>
-    <table  id="task-list-tomorrow" class="w3-table">
+    <table  id="task-list-tomorrow" class="w3-table tasks">
     </table>
     <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
@@ -32,7 +32,7 @@
     <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
       <h1><i>Later</i></h1>
     </div>
-    <table id="task-list-later" class="w3-table">
+    <table id="task-list-later" class="w3-table tasks">
     </table>
     <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
@@ -245,7 +245,7 @@ function display_task(x) {
         '    <span id="delete_task-'+x.id+'" class="delete_task material-icons">delete</span>' +
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
         '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
-        '    <span id="prio_task-'+x.id+'" class="material-icons prio_task ">' + prio + '</span>' +
+        '    <span id="prio_task-'+x.id+'" data-order="' + x.order + '" class="material-icons prio_task ">' + prio + '</span>' +
         '  </td>' +
         '</tr>';
   }
@@ -258,8 +258,16 @@ function prio_task(event) {
   console.log("toggle prio for item", event.target.id )
   id = event.target.id.replace("prio_task-","");
   prio = event.target.innerHTML == "priority_high";
-  console.log("updating :",{'id':id, 'prio':prio==false})
-  api_update_task({'id':id, 'prio':prio==false}, 
+  if(!prio)
+  {
+    order = 0;
+  }
+  else
+  {
+    order = (this.dataset.order == 0) ? 1 : this.dataset.order;  
+  }
+  console.log("updating :",{'id':id, 'prio':prio==false, 'order':order})
+    api_update_task({'id':id, 'prio':prio==false, 'order':order}, 
                   function(result) { 
                     console.log(result);
                     get_current_tasks();

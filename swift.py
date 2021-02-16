@@ -35,7 +35,6 @@ else:
 def tasks():
     return template("tasks.tpl")
 
-
 @route('/static/<filename>')
 def serve_static(filename):
     return static_file(filename, root='./assets/logo')
