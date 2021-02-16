@@ -55,6 +55,7 @@ def login():
 import json
 import dataset
 import time
+import datetime
 
 taskbook_db = dataset.connect('sqlite:///taskbook.db')
 
@@ -77,7 +78,7 @@ def create_task():
     try:
         data = request.json
         for key in data.keys():
-            assert key in ["description","list"], f"Illegal key '{key}'"
+            assert key in ["description","list","date"], f"Illegal key '{key}'"
         assert type(data['description']) is str, "Description is not a string."
         assert len(data['description'].strip()) > 0, "Description is length zero."
         assert data['list'] in ["today","tomorrow","later"], "List must be 'today', 'tomorrow', or 'later'"
@@ -89,6 +90,7 @@ def create_task():
         task_table.insert({
             "time": time.time(),
             "description":data['description'].strip(),
+            "date":data['date'],
             "list":data['list'],
             "completed":False,
             "prio":False
@@ -105,11 +107,13 @@ def update_task():
     try:
         data = request.json
         for key in data.keys():
-            assert key in ["id","description","completed","list","prio","order"], f"Illegal key '{key}'"
+            assert key in ["id","description","date","completed","list","prio","order"], f"Illegal key '{key}'"
         assert type(data['id']) is int, f"id '{id}' is not int"
         if "description" in request:
             assert type(data['description']) is str, "Description is not a string."
             assert len(data['description'].strip()) > 0, "Description is length zero."
+        if "date" in request:
+            assert type(data['date']) is datetime, "Date is not correct format."
         if "completed" in request:
             assert type(data['completed']) is bool, "Completed is not a bool."
         if "list" in request:

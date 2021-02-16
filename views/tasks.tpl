@@ -148,14 +148,14 @@ function save_edit(event) {
   id = event.target.id.replace("save_edit-","");
   console.log("desc to save = ",$("#input-" + id).val())
   if ((id != "today") & (id != "tomorrow") & (id != "later")) {
-    api_update_task({'id':id, description:$("#input-" + id).val()},
+    api_update_task({'id':id, description:$("#input-" + id).val(), date:$("#newdate-" + id).val()},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
                       $("#current_input").val("")
                     } );
   } else {
-    api_create_task({description:$("#input-" + id).val(), list:id},
+    api_create_task({description:$("#input-" + id).val(), list:id, date:$("#newdate-" + id).val()},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
@@ -222,6 +222,7 @@ function display_task(x) {
         '        <form>' +
         '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
         '             type="text" autofocus placeholder="Add new task..."/>'+
+        '           <input id="newdate-'+x.id+'" style="height:22px" class="w3-input" type="date"/>' +
         '         </form>' +
         '      </span>' + 
         '  </td>' +
@@ -235,9 +236,10 @@ function display_task(x) {
     t = '<tr id="task-'+x.id+'" class="task">' + 
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
-        '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span>' + 
+        '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + x.date + '</span>' + 
         '      <span id="editor-'+x.id+'" hidden>' + 
         '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/>' +
+        '        <input id="newdate-'+x.id+'" style="height:22px" class="w3-input" type="date"/>' +
         '      </span>' + 
         '  </td>' +
         '  <td>' +
