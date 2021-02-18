@@ -241,7 +241,7 @@ function display_task(x) {
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
         '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span><br>' +
-        '      <span id="dates-'+x.id+'" class="dates"><small>Created: ' + x.date + ' Deadline: ' + x.deadline + '</small></span>' +
+        '      <span id="dates-'+x.id+'" class="dates"><small>Created: <span id="date1">' + x.date + '</span> Deadline: <span id="date2">' + x.deadline + '</span></small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
         '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/><br>' +
         '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Created: ' + x.date + ' Deadline: </label>' +
