@@ -83,6 +83,14 @@ function input_keypress(event) {
   $("#filler-"+id).prop('hidden', true);
   $("#save_edit-"+id).prop('hidden', false);
   $("#undo_edit-"+id).prop('hidden', false);
+  // set up enter key funcitonality
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    $("#save_edit-"+id).click();
+  }
 }
 
 /* EVENT HANDLERS */
