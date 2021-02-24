@@ -64,7 +64,7 @@ def get_version():
 
 @get('/api/tasks')
 def get_tasks():
-    'return a list of tasks sorted by submit/modify time'
+    'return a list of tasks sorted by order'
     response.headers['Content-Type'] = 'application/json'
     response.headers['Cache-Control'] = 'no-cache'
     task_table = taskbook_db.get_table('task')

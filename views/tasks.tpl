@@ -118,6 +118,28 @@ function move_task(event) {
                   } );
 }
 
+function place_subtask(parent) {
+  console.log("inserting subtasks under: ", parent);
+
+  var i = parseInt(parent);
+  api_get_tasks(function(res) {
+    res.tasks.forEach(function(item) {
+      i++;
+      if (item.id == parent) {
+        res.tasks.forEach(function(task) {
+          if (task.parent == item.id) {
+            api_update_task({'id':item.id, 'order':task.order+1}, function (r) {
+              console.log(r);
+            });
+          }
+        })
+        console.log("updating order for task id:", item.id, " => ", i); 
+
+      }
+    });
+  });
+}
+
 function complete_task(event) {
   if ($("#current_input").val() != "") { return }
   console.log("complete item", event.target.id )
@@ -155,14 +177,15 @@ function edit_task(event) {
 function save_edit(event) {
   console.log("save item", event.target.id)
   if (event.target.id.includes("sub")){
-    par = event.target.id.replace("sub_save_edit-", "");
+    par = parseInt(event.target.id.replace("sub_save_edit-", ""));
     lis = $(this).parents()[3].id.replace("task-list-","");
     
     api_create_task({description:$("#sub_input-" + id).val(), list:lis, parent:par},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
-                      $("#current_input").val("")
+                      $("#current_input").val("");
+                      place_subtask(par);
                     } );
   }else{
     id = event.target.id.replace("save_edit-","");
@@ -239,6 +262,7 @@ function display_task(x) {
   prio = x.prio ? "priority_high" : "crop_portrait";
   shown = x.showsub ? "expand_more" : "expand_less";
   hide = x.showsub ? "" : "hidden";
+  drag = x.showsub ? "no-sort" : "";
   if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
 
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
@@ -257,7 +281,7 @@ function display_task(x) {
         '  </td>' +
         '</tr>';
   } else {
-    t = '<tr id="task-'+x.id+'" class="task">' + 
+    t = '<tr id="task-'+x.id+'" class="task '+drag+'">' + 
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
         '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span>' + 
