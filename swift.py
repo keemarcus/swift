@@ -53,7 +53,6 @@ def login():
 
 import json
 import dataset
-import time
 from datetime import date
 
 taskbook_db = dataset.connect('sqlite:///taskbook.db')
@@ -88,7 +87,6 @@ def create_task():
     try:
         task_table = taskbook_db.get_table('task')
         task_table.insert({
-            "time": time.time(),
             "description":data['description'].strip(),
             "date":date.today(),
             "deadline":data['deadline'],
@@ -156,6 +154,16 @@ def delete_task():
     # return 200 Success
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'success': True})
+
+
+@get('/api/users')
+def get_users():
+    # return list of all users
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Cache-Control'] = 'no-cache'
+    user_table = taskbook_db.get_table('user')
+    users = [dict(x) for x in user_table.find(order_by='userId')]
+    return { "users": users }
 
 if PYTHONANYWHERE:
     application = default_app()
