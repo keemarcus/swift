@@ -13,7 +13,6 @@
 
 
 <div class="row col-lg-12">
-
   <!-- Today -->
   <div class="col-sm-4">
     <div class="rcorners">
