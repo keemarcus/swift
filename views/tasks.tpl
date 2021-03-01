@@ -11,35 +11,41 @@
   td {white-space: nowrap}
 </style>
 
-<div class="w3-row">
-  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
-    <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
-      <h1><i>Today</i></h1>
+
+<div class="row col-lg-12">
+
+  <!-- Today -->
+  <div class="col-sm-4">
+    <div class="rcorners">
+      <h1 style="text-align: center"><i><u>Today</u></i></h1>
+      <table id="task-list-today" class="table table-borderless tasks">
+      </table>
     </div>
-    <table id="task-list-today" class="w3-table tasks">
-    </table>
-    <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
-  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
-    <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
-      <h1><i>Tomorrow</i></h1>
+  
+  <!-- Tomorrow -->
+  <div class="col-sm-4">
+    <div class="rcorners">
+      <h1 style="text-align: center"><i><u>Tomorrow</u></i></h1>
+      <table id="task-list-tomorrow" class="table table-borderless tasks">
+      </table>
     </div>
-    <table  id="task-list-tomorrow" class="w3-table tasks">
-    </table>
-    <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
-  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
-    <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
-      <h1><i>Later</i></h1>
+
+  <!-- Later -->
+  <div class="col-sm-4">
+    <div class="rcorners">
+      <h1 style="text-align: center"><i><u>Later</u></i></h1>
+      <table id="task-list-later" class="table table-borderless tasks">
+      </table>
     </div>
-    <table id="task-list-later" class="w3-table tasks">
-    </table>
-    <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
 </div>
-<input id="current_input" hidden value=""/> 
-<script>
 
+<input id="current_input" hidden value=""/> 
+
+% include("footer_html.tpl")
+<script>
 /* API CALLS */
 
 function api_get_tasks(success_function) {
@@ -231,23 +237,27 @@ function display_task(x) {
         '  <td colspan="2"></td>' +  
         '  <td><span id="editor-'+x.id+'">' + 
         '        <form>' +
-        '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
-        '             type="text" autofocus placeholder="Add new task..."/>'+
-        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Deadline:</label>' +
-        '           <input id="newdeadline-'+x.id+'" class="w3-input" type="date" style="display:inline-block; height:10px; width:150px"/></small>' +
+        '           <div class="mb-3"> '+
+        '             <input id="input-'+x.id+'"  class="form-control" '+ 
+        '               type="text" autofocus placeholder="Add new task..."/>'+
+        '           </div> '+
+        '           <div class="mb-3" style="text-align: center"> '+
+        '             <small><label for="newdeadline-'+x.id+'" style="display:inline-block"><b>Deadline:</b></label>' +
+        '             <input id="newdeadline-'+x.id+'" class="form-control" type="date" style="display:inline-block;  width:auto"/></small>' +
+        '           </div> '+
         '         </form>' +
         '      </span>' + 
         '  </td>' +
         '  <td style="width:72px">' +
         '    <span id="filler-'+x.id+'" class="material-icons">more_horiz</span>' + 
-        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
-        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
+        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; color: white ">done</span>' + 
+        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons" style="border-radius: 5px;background-color: #e86967; color: white ">close</span>' +
         '  </td>' +
         '</tr>';
   } else {
     t = '<tr id="task-'+x.id+'" class="task">' + 
-        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
-        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
+        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons" style="border-radius: 5px;background-color: #6dc8e1; margin-right:7px">' + arrow1 + '</span></td>' +
+        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons" style="border-radius: 5px;background-color: #8dcf65">' + arrow2 + '</span></td>' +
         '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span><br>' +
         '      <span id="dates-'+x.id+'" class="dates"><small>Created: <span id="date1">' + x.date + '</span> Deadline: <span id="date2">' + x.deadline + '</span></small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
@@ -257,11 +267,11 @@ function display_task(x) {
         '      </span>' + 
         '  </td>' +
         '  <td>' +
-        '    <span id="edit_task-'+x.id+'" class="edit_task '+x.list+' material-icons">edit</span>' +
-        '    <span id="delete_task-'+x.id+'" class="delete_task material-icons">delete</span>' +
+        '    <span id="edit_task-'+x.id+'" class="edit_task '+x.list+' material-icons" style="border-radius: 5px;background-color: #f1b869; ">edit</span>' +
+        '    <span id="delete_task-'+x.id+'" class="delete_task material-icons" style="border-radius: 5px;background-color: #e86967; ">delete</span>' +
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
         '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
-        '    <span id="prio_task-'+x.id+'" data-order="' + x.order + '" class="material-icons prio_task ">' + prio + '</span>' +
+        '    <span id="prio_task-'+x.id+'" data-order="' + x.order + '" class="material-icons prio_task " style="border-radius: 5px;background-color: #c2d9df; ">' + prio + '</span>' +
         '  </td>' +
         '</tr>';
   }
