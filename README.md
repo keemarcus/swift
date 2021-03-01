@@ -1,5 +1,5 @@
 # swift
-## Education SWIFT web app
+### Education SWIFT web app
 
 Project Name: Swiftly Do
 
