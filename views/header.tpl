@@ -75,7 +75,10 @@
     .rcorners {
       border-radius: 25px;
       border: 2px solid #c5cbd3;
-      padding: 25px;
+      padding-top: 25px;
+      padding-bottom: 20px;
+      padding-left: 10px;
+      padding-right: 10px;
       margin-top: 30px;
       width: 100%;
       height: 100%;

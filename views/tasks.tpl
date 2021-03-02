@@ -12,9 +12,9 @@
 </style>
 
 
-<div class="row col-lg-12">
+<div class="row col-lg-12" >
   <!-- Today -->
-  <div class="col-sm-4">
+  <div class="col-lg-4" >
     <div class="rcorners">
       <h1 style="text-align: center"><i><u>Today</u></i></h1>
       <table id="task-list-today" class="table table-borderless tasks">
@@ -23,7 +23,7 @@
   </div>
   
   <!-- Tomorrow -->
-  <div class="col-sm-4">
+  <div class="col-lg-4">
     <div class="rcorners">
       <h1 style="text-align: center"><i><u>Tomorrow</u></i></h1>
       <table id="task-list-tomorrow" class="table table-borderless tasks">
@@ -32,7 +32,7 @@
   </div>
 
   <!-- Later -->
-  <div class="col-sm-4">
+  <div class="col-lg-4">
     <div class="rcorners">
       <h1 style="text-align: center"><i><u>Later</u></i></h1>
       <table id="task-list-later" class="table table-borderless tasks">
@@ -144,6 +144,7 @@ function edit_task(event) {
   $("#input-"+id).val($("#description-"+id).text());
   // hide the text display
   $("#move_task-"+id).prop('hidden', true);
+  $("#date2").prop('hidden', true);
   $("#description-"+id).prop('hidden', true);
   $("#dates-"+id).prop('hidden', true);
   $("#edit_task-"+id).prop('hidden', true);
@@ -178,6 +179,10 @@ function save_edit(event) {
   }
 }
 
+
+
+
+
 function undo_edit(event) {
   id = event.target.id.replace("undo_edit-","")
   console.log("undo",[id])
@@ -189,6 +194,7 @@ function undo_edit(event) {
     $("#undo_edit-"+id).prop('hidden', true);
     // show the text display
     $("#move_task-"+id).prop('hidden', false);
+    $("#date2").prop('hidden', false);
     $("#description-"+id).prop('hidden', false);
     $("#dates-"+id).prop('hidden', false);
     $("#filler-"+id).prop('hidden', false);
@@ -211,6 +217,57 @@ function delete_task(event) {
                   } );
 }
 
+function getTodayDate(){
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + '/' + dd + '/' + yyyy;
+  return today;
+
+}
+
+function formatCreatedDate(d){
+ 
+  let day = d.substring(8,10);
+  let year = d.substring(0,4);
+  let month = d.substring(5,7);
+  var date = new Date(month + '/' + day + '/' + year);
+ 
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + '/' + dd + '/' + yyyy;
+
+  todaysDate = new Date(today);
+  
+  // To calculate the time difference of two dates 
+  var Difference_In_Time = todaysDate.getTime() - date.getTime(); 
+
+  // To calculate the no. of days between two dates 
+  var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)); 
+  
+  
+  
+  // To display the final no. of days (result) 
+  if(Difference_In_Days == 0)
+    return 'Today';
+  else if (Difference_In_Days == 1)
+    return 'Yesterday';
+  else
+    return Difference_In_Days + ' days ago';
+   
+}
+
+function formatDeadlineDate(d){
+  var date = new Date(d);
+  return date.toDateString();
+
+}
+
 function display_task(x) {
   switch(x.list) {
   case "today":
@@ -230,7 +287,11 @@ function display_task(x) {
   }
   completed = x.completed ? " completed" : "";
   prio = x.prio ? "priority_high" : "crop_portrait";
+
+  
+
   if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
+     
 
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
         '  <td colspan="2"></td>' +  
@@ -254,22 +315,29 @@ function display_task(x) {
         '  </td>' +
         '</tr>';
   } else {
+     date = formatCreatedDate(x.date);
+     deadline = formatDeadlineDate(x.deadline);
+      
     t = '<tr id="task-'+x.id+'" class="task">' + 
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons" style="border-radius: 5px;background-color: #6dc8e1; margin-right:7px">' + arrow1 + '</span></td>' +
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons" style="border-radius: 5px;background-color: #8dcf65">' + arrow2 + '</span></td>' +
-        '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span><br>' +
-        '      <span id="dates-'+x.id+'" class="dates"><small>Created: <span id="date1">' + x.date + '</span> Deadline: <span id="date2">' + x.deadline + '</span></small></span>' +
+        '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2" style="float:right"><small> ' + deadline +'</small></span><br>' +
+        '      <span id="dates-'+x.id+'" class="dates" style="padding-left: 8px"><small>Created: <span id="date1">' + date +'</span></small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
-        '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/><br>' +
-        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Created: ' + x.date + ' Deadline: </label>' +
-        '           <input id="newdeadline-'+x.id+'" class="w3-input" type="date" value="' + x.deadline + '" style="display:inline-block; height:10px; width:150px"/></small>' +
+        '           <div class="mb-3"> '+
+        '             <input id="input-'+x.id+'"  class="form-control" type="text" autofocus/>' +
+        '           </div> '+
+        '           <div class="mb-3"> '+
+        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block"><b>Created:</b> ' + date + ' | <b>Deadline:</b> </label>' +
+        '           <input id="newdeadline-'+x.id+'" class="form-control" type="date" value="' + x.deadline + '" style="display:inline-block; width:auto"/></small>' +
+        '           </div> '+
         '      </span>' + 
         '  </td>' +
-        '  <td>' +
+        '  <td style="vertical-align:middle">' +
         '    <span id="edit_task-'+x.id+'" class="edit_task '+x.list+' material-icons" style="border-radius: 5px;background-color: #f1b869; ">edit</span>' +
         '    <span id="delete_task-'+x.id+'" class="delete_task material-icons" style="border-radius: 5px;background-color: #e86967; ">delete</span>' +
-        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
-        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
+        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; ">done</span>' + 
+        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons" style="border-radius: 5px;background-color: #e86967; ">close</span>' +
         '    <span id="prio_task-'+x.id+'" data-order="' + x.order + '" class="material-icons prio_task " style="border-radius: 5px;background-color: #c2d9df; ">' + prio + '</span>' +
         '  </td>' +
         '</tr>';
