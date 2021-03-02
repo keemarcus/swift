@@ -45,6 +45,8 @@
   </div>
 </div>
 <input id="current_input" hidden value=""/> 
+
+% include("footer_html.tpl")
 <script>
 
 /* API CALLS */
@@ -299,17 +301,21 @@ function display_task(x) {
         '  <td colspan="2"></td>' +  
         '  <td><span id="editor-'+x.id+'">' + 
         '        <form>' +
-        '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
-        '             type="text" autofocus placeholder="Add new task..."/>'+
-        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Deadline:</label>' +
-        '           <input id="newdeadline-'+x.id+'" class="w3-input" type="date" style="display:inline-block; height:10px; width:150px"/></small>' +
+        '           <div class="mb-3"> '+
+        '             <input id="input-'+x.id+'"  class="form-control" '+ 
+        '               type="text" autofocus placeholder="Add new task..."/>'+
+        '           </div> '+
+        '           <div class="mb-3" style="text-align: center"> '+
+        '             <small><label for="newdeadline-'+x.id+'" style="display:inline-block"><b>Deadline:</b></label>' +
+        '             <input id="newdeadline-'+x.id+'" class="form-control" type="date" style="display:inline-block;  width:auto"/></small>' +
+        '           </div> '+
         '         </form>' +
         '      </span>' + 
         '  </td>' +
         '  <td style="width:72px">' +
         '    <span id="filler-'+x.id+'" class="material-icons">more_horiz</span>' + 
-        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
-        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
+        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; color: white ">done</span>' + 
+        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons" style="border-radius: 5px;background-color: #e86967; color: white ">close</span>' +
         '  </td>' +
         '</tr>';
   } else {
@@ -317,7 +323,6 @@ function display_task(x) {
      deadline = formatDeadlineDate(x.deadline);
       
     t = '<tr id="task-'+x.id+'" class="task">' + 
-
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons" style="border-radius: 5px;background-color: #6dc8e1; margin-right:7px">' + arrow1 + '</span></td>' +
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons" style="border-radius: 5px;background-color: #8dcf65">' + arrow2 + '</span></td>' +
         '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
