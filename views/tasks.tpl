@@ -2,7 +2,7 @@
 % include("banner.tpl")
 
 <style>
-  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task {
+  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task, #gohome {
     cursor: pointer;
   }
   .completed {text-decoration: line-through;}
@@ -310,6 +310,18 @@ function get_current_tasks() {
     $(".save_edit").click(save_edit);
     $(".undo_edit").click(undo_edit);
     $(".delete_task").click(delete_task);
+
+    $("#lout").click(function(){
+      console.log("erasing session...");
+      sessionStorage.clear();
+      location.reload();
+    });
+    $("#lin").click(function(){
+      window.location.href = "./login";
+    });
+    $("#gohome").click(function(){
+      window.location.href = "./tasks";
+    });
     // set all inputs to set flag
     $("input").keypress(input_keypress);
   });
@@ -317,6 +329,13 @@ function get_current_tasks() {
 
 $(document).ready(function() {
   get_current_tasks()
+  user = sessionStorage.getItem("username");
+  if (user!=null){
+    $("#login").prop('hidden', true);
+    $("#loggedin").prop('hidden', false);
+    $("#logged-user").text(user);
+    console.log("logged in as: ", user);
+  }
 });
 
 </script>
