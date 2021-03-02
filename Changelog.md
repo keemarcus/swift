@@ -1,16 +1,21 @@
-ChangeLog
+<b><u>ChangeLog</b></u>
 
-Version 1.0
-01/28 - Started work on the project using the given template
-
-Version 1.1
-02/04 - Added Later Column 
-
-Version 1.2
-02/07 - Added Priortization Markers 
-02/09 - Logo Added, Ability to click and drag tasks to order them within a column added 
-02/14 - Ability to drag tasks inbetween columns added 
-
-Version 1.3
-02/17 - Dates added to tasks created
-02/18 - Functionality for enter key added
+<b>Version 1.0</b>
+<ul>
+  <li>01/28 - Started work on the project using the given template</li>
+</ul>
+<b>Version 1.1</b>
+<ul>
+  <li>02/04 - Added Later Column</li> 
+</ul>
+<b>Version 1.2</b>
+<ul>
+  <li>02/07 - Added Priortization Markers</li>
+  <li>02/09 - Logo Added, Ability to click and drag tasks to order them within a column added</li>
+  <li>02/14 - Ability to drag tasks inbetween columns added</li>  
+</ul>
+<b>Version 1.3</b>
+<ul>
+  <li>02/17 - Dates added to tasks created</li>
+  <li>02/18 - Functionality for enter key added</li>
+</ul>
