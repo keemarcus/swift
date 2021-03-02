@@ -11,7 +11,6 @@
   td {white-space: nowrap}
 </style>
 
-
 <div class="row col-lg-12" >
   <!-- Today -->
   <div class="col-lg-4" >
@@ -40,11 +39,9 @@
     </div>
   </div>
 </div>
-
 <input id="current_input" hidden value=""/> 
-
-% include("footer_html.tpl")
 <script>
+
 /* API CALLS */
 
 function api_get_tasks(success_function) {
@@ -297,21 +294,17 @@ function display_task(x) {
         '  <td colspan="2"></td>' +  
         '  <td><span id="editor-'+x.id+'">' + 
         '        <form>' +
-        '           <div class="mb-3"> '+
-        '             <input id="input-'+x.id+'"  class="form-control" '+ 
-        '               type="text" autofocus placeholder="Add new task..."/>'+
-        '           </div> '+
-        '           <div class="mb-3" style="text-align: center"> '+
-        '             <small><label for="newdeadline-'+x.id+'" style="display:inline-block"><b>Deadline:</b></label>' +
-        '             <input id="newdeadline-'+x.id+'" class="form-control" type="date" style="display:inline-block;  width:auto"/></small>' +
-        '           </div> '+
+        '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
+        '             type="text" autofocus placeholder="Add new task..."/>'+
+        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Deadline:</label>' +
+        '           <input id="newdeadline-'+x.id+'" class="w3-input" type="date" style="display:inline-block; height:10px; width:150px"/></small>' +
         '         </form>' +
         '      </span>' + 
         '  </td>' +
         '  <td style="width:72px">' +
         '    <span id="filler-'+x.id+'" class="material-icons">more_horiz</span>' + 
-        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; color: white ">done</span>' + 
-        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons" style="border-radius: 5px;background-color: #e86967; color: white ">close</span>' +
+        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
+        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
         '  </td>' +
         '</tr>';
   } else {
