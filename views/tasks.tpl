@@ -144,7 +144,7 @@ function edit_task(event) {
   $("#input-"+id).val($("#description-"+id).text());
   // hide the text display
   $("#move_task-"+id).prop('hidden', true);
-  $("#date2").prop('hidden', true);
+  $("#date2-"+id).prop('hidden', true);
   $("#description-"+id).prop('hidden', true);
   $("#dates-"+id).prop('hidden', true);
   $("#edit_task-"+id).prop('hidden', true);
@@ -194,7 +194,7 @@ function undo_edit(event) {
     $("#undo_edit-"+id).prop('hidden', true);
     // show the text display
     $("#move_task-"+id).prop('hidden', false);
-    $("#date2").prop('hidden', false);
+    $("#date2-"+id).prop('hidden', false);
     $("#description-"+id).prop('hidden', false);
     $("#dates-"+id).prop('hidden', false);
     $("#filler-"+id).prop('hidden', false);
@@ -321,7 +321,7 @@ function display_task(x) {
     t = '<tr id="task-'+x.id+'" class="task">' + 
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons" style="border-radius: 5px;background-color: #6dc8e1; margin-right:7px">' + arrow1 + '</span></td>' +
         '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons" style="border-radius: 5px;background-color: #8dcf65">' + arrow2 + '</span></td>' +
-        '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2" style="float:right"><small> ' + deadline +'</small></span><br>' +
+        '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
         '      <span id="dates-'+x.id+'" class="dates" style="padding-left: 8px"><small>Created: <span id="date1">' + date +'</span></small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
         '           <div class="mb-3"> '+
