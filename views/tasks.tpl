@@ -164,7 +164,7 @@ function save_edit(event) {
                       $("#current_input").val("")
                     } );
   } else {
-    api_create_task({description:$("#input-" + id).val(), list:id, deadline:$("#newdeadline-" + id).val()},
+    api_create_task({description:$("#input-" + id).val(), list:id, deadline:$("#newdeadline-" + id).val(), 'userId':sessionStorage.getItem("userid")},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
@@ -300,7 +300,10 @@ function get_current_tasks() {
   // display the tasks
   api_get_tasks(function(result){
     for (const task of result.tasks) {
-      display_task(task);
+      if(task.userId == sessionStorage.getItem("userid"))
+      {
+       display_task(task);
+      }
     }
     // wire the response events 
     $(".move_task").click(move_task);
