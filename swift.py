@@ -76,7 +76,7 @@ def create_task():
     try:
         data = request.json
         for key in data.keys():
-            assert key in ["description","deadline","list"], f"Illegal key '{key}'"
+            assert key in ["description","deadline","list","userId"], f"Illegal key '{key}'"
         assert type(data['description']) is str, "Description is not a string."
         assert len(data['description'].strip()) > 0, "Description is length zero."
         assert len(data['deadline'].strip()) > 0, "Must enter a deadline."
@@ -92,7 +92,8 @@ def create_task():
             "deadline":data['deadline'],
             "list":data['list'],
             "completed":False,
-            "prio":False
+            "prio":False,
+            "userId":data['userId']
         })
     except Exception as e:
         response.status="409 Bad Request:"+str(e)

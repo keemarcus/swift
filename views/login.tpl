@@ -37,7 +37,7 @@
 
     function create_session(user){
         sessionStorage.setItem("username", user.username);
-        sessionStorage.setItem("userid", user.userId);
+        sessionStorage.setItem("userid", user.id);
         
         console.log("created session for: ", sessionStorage.getItem("username"));
     }
