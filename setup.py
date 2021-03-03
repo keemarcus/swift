@@ -18,5 +18,5 @@ if __name__ == "__main__":
     user_table.drop()
     user_table = taskbook_db.create_table('user')
     user_table.insert_many([
-        {"userId":00, "username":"default", "password":"1234"}
+        {"username":"default", "password":"1234"}
     ])

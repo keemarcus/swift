@@ -2,7 +2,7 @@
 % include("banner.tpl")
 
 <style>
-  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task, #gohome {
+  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task, #gohome, #lout {
     cursor: pointer;
   }
   .completed {text-decoration: line-through;}
@@ -11,33 +11,42 @@
   td {white-space: nowrap}
 </style>
 
-<div class="w3-row">
-  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
-    <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
-      <h1><i>Today</i></h1>
+
+
+<div class="row col-lg-12" >
+  <!-- Today -->
+  <div class="col-lg-4" >
+    <div class="rcorners">
+      <h1 style="text-align: center"><i><u>Today</u></i></h1>
+      <table id="task-list-today" class="table table-borderless tasks">
+      </table>
+
     </div>
-    <table id="task-list-today" class="w3-table tasks">
-    </table>
-    <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
-  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
-    <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
-      <h1><i>Tomorrow</i></h1>
+
+  
+  <!-- Tomorrow -->
+  <div class="col-lg-4">
+    <div class="rcorners">
+      <h1 style="text-align: center"><i><u>Tomorrow</u></i></h1>
+      <table id="task-list-tomorrow" class="table table-borderless tasks">
+      </table>
     </div>
-    <table  id="task-list-tomorrow" class="w3-table tasks">
-    </table>
-    <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
-  <div class="w3-col s4 w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-white">
-    <div class="w3-row w3-xxlarge w3-bottombar w3-border-black w3-margin-bottom">
-      <h1><i>Later</i></h1>
+
+
+  <!-- Later -->
+  <div class="col-lg-4">
+    <div class="rcorners">
+      <h1 style="text-align: center"><i><u>Later</u></i></h1>
+      <table id="task-list-later" class="table table-borderless tasks">
+      </table>
     </div>
-    <table id="task-list-later" class="w3-table tasks">
-    </table>
-    <div class="w3-row w3-bottombar w3-border-black w3-margin-bottom w3-margin-top"></div>
   </div>
 </div>
 <input id="current_input" hidden value=""/> 
+
+% include("footer_html.tpl")
 <script>
 
 /* API CALLS */
@@ -139,6 +148,7 @@ function edit_task(event) {
   $("#input-"+id).val($("#description-"+id).text());
   // hide the text display
   $("#move_task-"+id).prop('hidden', true);
+  $("#date2-"+id).prop('hidden', true);
   $("#description-"+id).prop('hidden', true);
   $("#dates-"+id).prop('hidden', true);
   $("#edit_task-"+id).prop('hidden', true);
@@ -173,6 +183,10 @@ function save_edit(event) {
   }
 }
 
+
+
+
+
 function undo_edit(event) {
   id = event.target.id.replace("undo_edit-","")
   console.log("undo",[id])
@@ -184,6 +198,7 @@ function undo_edit(event) {
     $("#undo_edit-"+id).prop('hidden', true);
     // show the text display
     $("#move_task-"+id).prop('hidden', false);
+    $("#date2-"+id).prop('hidden', false);
     $("#description-"+id).prop('hidden', false);
     $("#dates-"+id).prop('hidden', false);
     $("#filler-"+id).prop('hidden', false);
@@ -206,62 +221,111 @@ function delete_task(event) {
                   } );
 }
 
+function getTodayDate(){
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + '/' + dd + '/' + yyyy;
+  return today;
+
+}
+
+function formatCreatedDate(d){
+ 
+  let day = d.substring(8,10);
+  let year = d.substring(0,4);
+  let month = d.substring(5,7);
+  var date = new Date(month + '/' + day + '/' + year);
+ 
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + '/' + dd + '/' + yyyy;
+
+  todaysDate = new Date(today);
+  
+  // To calculate the time difference of two dates 
+  var Difference_In_Time = todaysDate.getTime() - date.getTime(); 
+
+  // To calculate the no. of days between two dates 
+  var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)); 
+  
+  
+  
+  // To display the final no. of days (result) 
+  if(Difference_In_Days == 0)
+    return 'Today';
+  else if (Difference_In_Days == 1)
+    return 'Yesterday';
+  else
+    return Difference_In_Days + ' days ago';
+   
+}
+
+function formatDeadlineDate(d){
+  var date = new Date(d);
+  return date.toDateString();
+
+}
+
 function display_task(x) {
-  switch(x.list) {
-  case "today":
-    arrow1 = "arrow_forward";
-    arrow2 = "chevron_right";
-    break;
-  case "tomorrow":
-    arrow1 = "chevron_left";
-    arrow2 = "chevron_right";
-    break;
-  case "later":
-    arrow1 = "chevron_left";
-    arrow2 = "arrow_back";
-    break;
-  default:
-    break;
-  }
   completed = x.completed ? " completed" : "";
   prio = x.prio ? "priority_high" : "crop_portrait";
+  prio_color = x.prio ? "#00b300" : "#c2d9df";
+
   if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
+     
 
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
-        '  <td colspan="2"></td>' +  
-        '  <td><span id="editor-'+x.id+'">' + 
+        '  <td colspan="2">' +
+        '<span id="editor-'+x.id+'">' + 
         '        <form>' +
-        '           <input id="input-'+x.id+'" style="height:22px" class="w3-input" '+ 
-        '             type="text" autofocus placeholder="Add new task..."/>'+
-        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Deadline:</label>' +
-        '           <input id="newdeadline-'+x.id+'" class="w3-input" type="date" style="display:inline-block; height:10px; width:150px"/></small>' +
+        '           <div class="mb-3"> '+
+        '             <input id="input-'+x.id+'"  class="form-control" '+ 
+        '               type="text" autofocus placeholder="Add new task..."/>'+
+        '           </div> '+
+        '           <div class="mb-3" style="text-align: center"> '+
+        '             <small><label for="newdeadline-'+x.id+'" style="display:inline-block"><b>Deadline:</b></label>' +
+        '             <input id="newdeadline-'+x.id+'" class="form-control" type="date" style="display:inline-block;  width:auto"/></small>' +
+        '           </div> '+
         '         </form>' +
         '      </span>' + 
         '  </td>' +
         '  <td style="width:72px">' +
         '    <span id="filler-'+x.id+'" class="material-icons">more_horiz</span>' + 
-        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
-        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
+        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; color: white ">done</span>' + 
+        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons" style="border-radius: 5px;background-color: #e86967; color: white ">close</span>' +
         '  </td>' +
         '</tr>';
   } else {
+     date = formatCreatedDate(x.date);
+     deadline = formatDeadlineDate(x.deadline);
+      
     t = '<tr id="task-'+x.id+'" class="task">' + 
-        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons">' + arrow1 + '</span></td>' +
-        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons">' + arrow2 + '</span></td>' +
-        '  <td><span id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</span><br>' +
-        '      <span id="dates-'+x.id+'" class="dates"><small>Created: <span id="date1">' + x.date + '</span> Deadline: <span id="date2">' + x.deadline + '</span></small></span>' +
+        '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
+        '      <span id="dates-'+x.id+'" class="dates" style="padding-left: 8px"><small>Created: <span id="date1">' + date +'</span></small></span>' +
+
         '      <span id="editor-'+x.id+'" hidden>' + 
-        '        <input id="input-'+x.id+'" style="height:22px" class="w3-input" type="text" autofocus/><br>' +
-        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block">Created: ' + x.date + ' Deadline: </label>' +
-        '           <input id="newdeadline-'+x.id+'" class="w3-input" type="date" value="' + x.deadline + '" style="display:inline-block; height:10px; width:150px"/></small>' +
+        '           <div class="mb-3"> '+
+        '             <input id="input-'+x.id+'"  class="form-control" type="text" autofocus/>' +
+        '           </div> '+
+        '           <div class="mb-3"> '+
+        '           <small><label for="newdeadline-'+x.id+'" style="display:inline-block"><b>Created:</b> ' + date + ' | <b>Deadline:</b> </label>' +
+        '           <input id="newdeadline-'+x.id+'" class="form-control" type="date" value="' + x.deadline + '" style="display:inline-block; width:auto"/></small>' +
+        '           </div> '+
         '      </span>' + 
         '  </td>' +
-        '  <td>' +
-        '    <span id="edit_task-'+x.id+'" class="edit_task '+x.list+' material-icons">edit</span>' +
-        '    <span id="delete_task-'+x.id+'" class="delete_task material-icons">delete</span>' +
-        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons">done</span>' + 
-        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons">cancel</span>' +
-        '    <span id="prio_task-'+x.id+'" data-order="' + x.order + '" class="material-icons prio_task ">' + prio + '</span>' +
+        '  <td style="vertical-align:middle">' +
+        '    <span id="edit_task-'+x.id+'" class="edit_task '+x.list+' material-icons" style="border-radius: 5px;background-color: #f1b869; ">edit</span>' +
+        '    <span id="delete_task-'+x.id+'" class="delete_task material-icons" style="border-radius: 5px;background-color: #e86967; ">delete</span>' +
+        '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; ">done</span>' + 
+        '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons" style="border-radius: 5px;background-color: #e86967; ">close</span>' +
+        '    <span id="prio_task-'+x.id+'" data-order="' + x.order + '" class="material-icons prio_task " style="border-radius: 5px;background-color: '+prio_color+'; ">' + prio + '</span>' +
+
         '  </td>' +
         '</tr>';
   }
@@ -316,9 +380,6 @@ function get_current_tasks() {
       sessionStorage.clear();
       location.reload();
     });
-    $("#lin").click(function(){
-      window.location.href = "./login";
-    });
     $("#gohome").click(function(){
       window.location.href = "./tasks";
     });
@@ -331,7 +392,7 @@ $(document).ready(function() {
   get_current_tasks()
   user = sessionStorage.getItem("username");
   if (user!=null){
-    $("#login").prop('hidden', true);
+    $("#loggedout").prop('hidden', true);
     $("#loggedin").prop('hidden', false);
     $("#logged-user").text(user);
     console.log("logged in as: ", user);
