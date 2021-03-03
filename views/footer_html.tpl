@@ -4,7 +4,7 @@
     <img src="/static/5.png" style="height:100px;width:100px;" />
       <small class="d-block mb-3 text-muted">&copy; 2021</small>
     </div>
-    <div class="col-6 col-md">
+    <div class="col-6 col-md" hidden>
       <h5>Features</h5>
       <ul class="list-unstyled text-small">
         <li><a class="link-secondary" href="#">Cool stuff</a></li>
@@ -12,7 +12,7 @@
         <li><a class="link-secondary" href="#">Team feature</a></li>
       </ul>
     </div>
-    <div class="col-6 col-md">
+    <div class="col-6 col-md" hidden>
       <h5>Resources</h5>
       <ul class="list-unstyled text-small">
         <li><a class="link-secondary" href="#">Resource name</a></li>
@@ -20,7 +20,7 @@
         <li><a class="link-secondary" href="#">Another resource</a></li>
       </ul>
     </div>
-    <div class="col-6 col-md">
+    <div class="col-6 col-md" hidden>
       <h5>Resources</h5>
       <ul class="list-unstyled text-small">
         <li><a class="link-secondary" href="#">Business</a></li>
@@ -28,7 +28,7 @@
         <li><a class="link-secondary" href="#">Government</a></li>
       </ul>
     </div>
-    <div class="col-6 col-md">
+    <div class="col-6 col-md" hidden>
       <h5>About</h5>
       <ul class="list-unstyled text-small">
         <li><a class="link-secondary" href="#">Team</a></li>

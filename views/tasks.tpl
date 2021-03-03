@@ -2,7 +2,7 @@
 % include("banner.tpl")
 
 <style>
-  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task {
+  .save_edit, .undo_edit, .move_task, .description, .edit_task, .delete_task, .prio_task, #gohome, #lout {
     cursor: pointer;
   }
   .completed {text-decoration: line-through;}
@@ -285,33 +285,16 @@ function formatDeadlineDate(d){
 }
 
 function display_task(x) {
-  switch(x.list) {
-  case "today":
-    arrow1 = "arrow_forward";
-    arrow2 = "chevron_right";
-    break;
-  case "tomorrow":
-    arrow1 = "chevron_left";
-    arrow2 = "chevron_right";
-    break;
-  case "later":
-    arrow1 = "chevron_left";
-    arrow2 = "arrow_back";
-    break;
-  default:
-    break;
-  }
   completed = x.completed ? " completed" : "";
   prio = x.prio ? "priority_high" : "crop_portrait";
-
-  
+  prio_color = x.prio ? "#00b300" : "#c2d9df";
 
   if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
      
 
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
- 
-        '  <td><span id="editor-'+x.id+'">' + 
+        '  <td colspan="2">' +
+        '<span id="editor-'+x.id+'">' + 
         '        <form>' +
         '           <div class="mb-3"> '+
         '             <input id="input-'+x.id+'"  class="form-control" '+ 
@@ -335,11 +318,8 @@ function display_task(x) {
      deadline = formatDeadlineDate(x.deadline);
       
     t = '<tr id="task-'+x.id+'" class="task">' + 
-        '  <td ><span id="move_task_further-'+x.id+'" class="move_task '+x.list+' 1 material-icons" style="border-radius: 5px;background-color: #6dc8e1; width:24px; padding: 0; vertical-align:middle">' + arrow1 + '</span>' +
-        '  <span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons" style="border-radius: 5px;background-color: #8dcf65; width:24px; padding: 0; vertical-align:middle">' + arrow2 + '</span>' +
-        '  <span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
-        '      <span id="dates-'+x.id+'" class="dates" style="padding-left: 0px"><small>Created: <span id="date1">' + date +'</span></small></span>' +
-
+        '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
+        '      <span id="dates-'+x.id+'" class="dates" style="padding-left: 8px"><small>Created: <span id="date1">' + date +'</span></small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
         '           <div class="mb-3"> '+
         '             <input id="input-'+x.id+'"  class="form-control" type="text" autofocus/>' +
@@ -355,7 +335,7 @@ function display_task(x) {
         '    <span id="delete_task-'+x.id+'" class="delete_task material-icons" style="border-radius: 5px;background-color: #e86967; ">delete</span>' +
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; ">done</span>' + 
         '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons" style="border-radius: 5px;background-color: #e86967; ">close</span>' +
-        '    <span id="prio_task-'+x.id+'" data-order="' + x.order + '" class="material-icons prio_task " style="border-radius: 5px;background-color: #c2d9df; ">' + prio + '</span>' +
+        '    <span id="prio_task-'+x.id+'" data-order="' + x.order + '" class="material-icons prio_task " style="border-radius: 5px;background-color: '+prio_color+'; ">' + prio + '</span>' +
 
         '  </td>' +
         '</tr>';
@@ -405,6 +385,15 @@ function get_current_tasks() {
     $(".save_edit").click(save_edit);
     $(".undo_edit").click(undo_edit);
     $(".delete_task").click(delete_task);
+
+    $("#lout").click(function(){
+      console.log("erasing session...");
+      sessionStorage.clear();
+      location.reload();
+    });
+    $("#gohome").click(function(){
+      window.location.href = "./tasks";
+    });
     // set all inputs to set flag
     $("input").keypress(input_keypress);
   });
@@ -412,6 +401,13 @@ function get_current_tasks() {
 
 $(document).ready(function() {
   get_current_tasks()
+  user = sessionStorage.getItem("username");
+  if (user!=null){
+    $("#loggedout").prop('hidden', true);
+    $("#loggedin").prop('hidden', false);
+    $("#logged-user").text(user);
+    console.log("logged in as: ", user);
+  }
 });
 
 </script>

@@ -53,7 +53,6 @@ def login():
 
 import json
 import dataset
-import time
 from datetime import date
 
 taskbook_db = dataset.connect('sqlite:///taskbook.db')
@@ -88,7 +87,6 @@ def create_task():
     try:
         task_table = taskbook_db.get_table('task')
         task_table.insert({
-            "time": time.time(),
             "description":data['description'].strip(),
             "date":date.today(),
             "deadline":data['deadline'],
@@ -126,8 +124,6 @@ def update_task():
     except Exception as e:
         response.status="400 Bad Request:"+str(e)
         return
-    if 'list' in data:
-        data['time'] = time.time()
     try:
         task_table = taskbook_db.get_table('task')
         task_table.update(row=data, keys=['id'])
@@ -156,6 +152,40 @@ def delete_task():
     # return 200 Success
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'success': True})
+
+
+@get('/api/users')
+def get_users():
+    # return list of all users
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Cache-Control'] = 'no-cache'
+    user_table = taskbook_db.get_table('user')
+    users = [dict(x) for x in user_table.find(order_by='userId')]
+    return { "users": users }
+
+@post('/api/users')
+def create_user():
+    try:
+        data = request.json
+        print(data)
+        for key in data.keys():
+            assert key in ["username", "password"], f"Illegal key '{key}'"
+        assert type(data['username']) is str, "Username is not a string."
+        assert type(data['password']) is str, "Password is not a string"
+    except Exception as e:
+        response.status="400 Bad Request:"+str(e)
+        return
+    try:
+        task_table = taskbook_db.get_table('user')
+        task_table.insert({
+            "username":data['username'].strip(),
+            "password":data['password'].strip()
+        })
+    except Exception as e:
+        response.status="409 Bad Request:"+str(e)
+    # return 200 Success
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps({'status':200, 'success': True})
 
 if PYTHONANYWHERE:
     application = default_app()
