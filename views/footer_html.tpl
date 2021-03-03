@@ -1,4 +1,4 @@
-<footer class="container py-5 pt-4 my-md-5  border-top" >
+<footer class="container py-5 pt-4 my-md-5" >
   <div class="row">
     <div class="col-12 col-md">
     <img src="/static/5.png" style="height:100px;width:100px;" />
