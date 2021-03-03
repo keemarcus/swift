@@ -6,16 +6,16 @@
     cursor: pointer;
   }
   .completed {text-decoration: line-through;}
-  .description { padding-left:8px }
+  .description { padding-left:0px }
   .placeholder { border: 1px solid black }
-  td {white-space: nowrap}
+  td {white-space: normal}
 </style>
 
 
 
-<div class="row col-lg-12" >
+<div class="row col-lg-12">
   <!-- Today -->
-  <div class="col-lg-4" >
+  <div class="col-lg-4 pt-4" >
     <div class="rcorners">
       <h1 style="text-align: center"><i><u>Today</u></i></h1>
       <table id="task-list-today" class="table table-borderless tasks">
@@ -26,7 +26,7 @@
 
   
   <!-- Tomorrow -->
-  <div class="col-lg-4">
+  <div class="col-lg-4 pt-4">
     <div class="rcorners">
       <h1 style="text-align: center"><i><u>Tomorrow</u></i></h1>
       <table id="task-list-tomorrow" class="table table-borderless tasks">
@@ -36,7 +36,7 @@
 
 
   <!-- Later -->
-  <div class="col-lg-4">
+  <div class="col-lg-4 pt-4">
     <div class="rcorners">
       <h1 style="text-align: center"><i><u>Later</u></i></h1>
       <table id="task-list-later" class="table table-borderless tasks">
@@ -105,9 +105,16 @@ function input_keypress(event) {
 /* EVENT HANDLERS */
 
 function move_task(event) {
+
   if ($("#current_input").val() != "") { return }
   console.log("move item", event.target.id )
-  id = event.target.id.replace("move_task-","");
+ 
+  if(event.target.id.substring(0,17) === 'move_task_further'){
+    id = event.target.id.replace("move_task_further-","");
+  }else{
+    id = event.target.id.replace("move_task-","");
+  }
+
   if(event.target.className.search("today") > 0) 
   {
     target_list = event.target.className.search("1") > 0 ? "later" : "tomorrow";
@@ -120,11 +127,14 @@ function move_task(event) {
   {
     target_list = event.target.className.search("1") > 0 ? "tomorrow" : "today";
   }
-  api_update_task({'id':id, 'list':target_list},
+  console.log("id: " + id.substring(0,17));
+
+   api_update_task({'id':id, 'list':target_list},
                   function(result) { 
                     console.log(result);
                     get_current_tasks();
                   } );
+
 }
 
 function complete_task(event) {
@@ -148,6 +158,7 @@ function edit_task(event) {
   $("#input-"+id).val($("#description-"+id).text());
   // hide the text display
   $("#move_task-"+id).prop('hidden', true);
+  $("#move_task_further-"+id).prop('hidden', true);
   $("#date2-"+id).prop('hidden', true);
   $("#description-"+id).prop('hidden', true);
   $("#dates-"+id).prop('hidden', true);
@@ -198,6 +209,7 @@ function undo_edit(event) {
     $("#undo_edit-"+id).prop('hidden', true);
     // show the text display
     $("#move_task-"+id).prop('hidden', false);
+    $("#move_task_further-"+id).prop('hidden', false);
     $("#date2-"+id).prop('hidden', false);
     $("#description-"+id).prop('hidden', false);
     $("#dates-"+id).prop('hidden', false);
@@ -298,7 +310,7 @@ function display_task(x) {
      
 
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
-        '  <td colspan="2"></td>' +  
+ 
         '  <td><span id="editor-'+x.id+'">' + 
         '        <form>' +
         '           <div class="mb-3"> '+
@@ -312,7 +324,7 @@ function display_task(x) {
         '         </form>' +
         '      </span>' + 
         '  </td>' +
-        '  <td style="width:72px">' +
+        '  <td>' +
         '    <span id="filler-'+x.id+'" class="material-icons">more_horiz</span>' + 
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; color: white ">done</span>' + 
         '    <span id="undo_edit-'+x.id+'" hidden class="undo_edit material-icons" style="border-radius: 5px;background-color: #e86967; color: white ">close</span>' +
@@ -323,10 +335,10 @@ function display_task(x) {
      deadline = formatDeadlineDate(x.deadline);
       
     t = '<tr id="task-'+x.id+'" class="task">' + 
-        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 1 material-icons" style="border-radius: 5px;background-color: #6dc8e1; margin-right:7px">' + arrow1 + '</span></td>' +
-        '  <td style="width:24px; padding: 0; vertical-align:middle"><span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons" style="border-radius: 5px;background-color: #8dcf65">' + arrow2 + '</span></td>' +
-        '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
-        '      <span id="dates-'+x.id+'" class="dates" style="padding-left: 8px"><small>Created: <span id="date1">' + date +'</span></small></span>' +
+        '  <td ><span id="move_task_further-'+x.id+'" class="move_task '+x.list+' 1 material-icons" style="border-radius: 5px;background-color: #6dc8e1; width:24px; padding: 0; vertical-align:middle">' + arrow1 + '</span>' +
+        '  <span id="move_task-'+x.id+'" class="move_task '+x.list+' 2 material-icons" style="border-radius: 5px;background-color: #8dcf65; width:24px; padding: 0; vertical-align:middle">' + arrow2 + '</span>' +
+        '  <span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
+        '      <span id="dates-'+x.id+'" class="dates" style="padding-left: 0px"><small>Created: <span id="date1">' + date +'</span></small></span>' +
 
         '      <span id="editor-'+x.id+'" hidden>' + 
         '           <div class="mb-3"> '+
@@ -338,7 +350,7 @@ function display_task(x) {
         '           </div> '+
         '      </span>' + 
         '  </td>' +
-        '  <td style="vertical-align:middle">' +
+        '  <td style="vertical-align:middle; width:85px; padding: 0;">' +
         '    <span id="edit_task-'+x.id+'" class="edit_task '+x.list+' material-icons" style="border-radius: 5px;background-color: #f1b869; ">edit</span>' +
         '    <span id="delete_task-'+x.id+'" class="delete_task material-icons" style="border-radius: 5px;background-color: #e86967; ">delete</span>' +
         '    <span id="save_edit-'+x.id+'" hidden class="save_edit material-icons" style="border-radius: 5px;background-color: #8dcf65; ">done</span>' + 
