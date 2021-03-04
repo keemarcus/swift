@@ -251,9 +251,9 @@ function formatCreatedDate(d){
   let month = d.substring(5,7);
   var date = new Date(year + '-' + month + '-' + day + 'T00:00:00');*/
  
-  console.log(d);
+  /*console.log(d);*/
   date = new Date(d + 'T00:00:00');
-  console.log(date);
+  /*console.log(date);*/
 
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
@@ -263,7 +263,7 @@ function formatCreatedDate(d){
   today = yyyy + '-' + mm + '-' + dd + 'T00:00:00';
 
   todaysDate = new Date(today);
-  console.log(todaysDate);
+  /*console.log(todaysDate);*/
   
   // To calculate the time difference of two dates 
   var Difference_In_Time = todaysDate.getTime() - date.getTime(); 
@@ -324,7 +324,7 @@ function display_task(x) {
       
     t = '<tr id="task-'+x.id+'" class="task">' + 
         '  <td><span><b id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
-        '      <span id="dates-'+x.id+'" class="dates" ><small>Created: <span id="date1">' + date +'</span></small></span>' +
+        '      <span id="dates-'+x.id+'" class="dates" hidden><small>Created: <span id="date1">' + date +'</span></small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
         '           <div class="mb-3"> '+
         '             <input id="input-'+x.id+'"  class="form-control" type="text" autofocus/>' +
