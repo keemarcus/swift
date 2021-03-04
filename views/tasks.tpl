@@ -294,7 +294,7 @@ function display_task(x) {
 
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
         '  <td colspan="2">' +
-        '<span id="editor-'+x.id+'">' + 
+        '   <span id="editor-'+x.id+'">' + 
         '        <form>' +
         '           <div class="mb-3"> '+
         '             <input id="input-'+x.id+'"  class="form-control" '+ 
@@ -319,7 +319,7 @@ function display_task(x) {
       
     t = '<tr id="task-'+x.id+'" class="task">' + 
         '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
-        '      <span id="dates-'+x.id+'" class="dates" style="padding-left: 8px"><small>Created: <span id="date1">' + date +'</span></small></span>' +
+        '      <span id="dates-'+x.id+'" class="dates" ><small>Created: <span id="date1">' + date +'</span></small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
         '           <div class="mb-3"> '+
         '             <input id="input-'+x.id+'"  class="form-control" type="text" autofocus/>' +
@@ -405,9 +405,12 @@ function get_current_tasks() {
 $(document).ready(function() {
   get_current_tasks()
   user = sessionStorage.getItem("username");
+  console.log(user);
   if (user!=null){
-    $("#loggedout").prop('hidden', true);
-    $("#loggedin").prop('hidden', false);
+    $("#registerButton").prop('hidden', true);
+    $("#loginButton").prop('hidden', true);
+    $("#logged-user").prop('hidden', false);
+    $("#lout").prop('hidden', false);
     $("#logged-user").text(user);
     console.log("logged in as: ", user);
   }

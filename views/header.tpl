@@ -76,7 +76,7 @@
       border: 2px solid #c5cbd3;
       padding-top: 25px;
       padding-bottom: 20px;
-      padding-left: 10px;
+      padding-left: 20px;
       padding-right: 10px;
       margin-top: 30px;
       width: 100%;
