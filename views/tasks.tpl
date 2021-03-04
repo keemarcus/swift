@@ -249,14 +249,14 @@ function formatCreatedDate(d){
   let day = d.substring(8,10);
   let year = d.substring(0,4);
   let month = d.substring(5,7);
-  var date = new Date(month + '/' + day + '/' + year);
+  var date = new Date(year + '-' + month + '-' + day + 'T00:00:00');
  
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
 
-  today = mm + '/' + dd + '/' + yyyy;
+  today = yyyy + '-' + mm + '-' + dd + 'T00:00:00';
 
   todaysDate = new Date(today);
   
@@ -279,7 +279,7 @@ function formatCreatedDate(d){
 }
 
 function formatDeadlineDate(d){
-  var date = new Date(d);
+  var date = new Date(d + 'T00:00:00');
   return date.toDateString();
 
 }
