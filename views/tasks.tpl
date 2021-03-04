@@ -318,7 +318,7 @@ function display_task(x) {
      deadline = formatDeadlineDate(x.deadline);
       
     t = '<tr id="task-'+x.id+'" class="task">' + 
-        '  <td><span id="description-'+x.id+'" class="description' + completed + '"><b>' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
+        '  <td><span><b id="description-'+x.id+'" class="description' + completed + '">' + x.description + '</b></span><span id="date2-'+x.id+'" style="float:right"><small> ' + deadline +'</small></span><br>' +
         '      <span id="dates-'+x.id+'" class="dates" ><small>Created: <span id="date1">' + date +'</span></small></span>' +
         '      <span id="editor-'+x.id+'" hidden>' + 
         '           <div class="mb-3"> '+
