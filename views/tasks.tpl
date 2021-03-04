@@ -246,11 +246,13 @@ function getTodayDate(){
 
 function formatCreatedDate(d){
  
-  let day = d.substring(8,10);
+  /*let day = d.substring(8,10);
   let year = d.substring(0,4);
   let month = d.substring(5,7);
-  var date = new Date(year + '-' + month + '-' + day + 'T00:00:00');
+  var date = new Date(year + '-' + month + '-' + day + 'T00:00:00');*/
  
+  date = new Date(d + 'T00:00:00');
+
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
