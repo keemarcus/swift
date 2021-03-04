@@ -181,12 +181,15 @@ def create_user():
         task_table.insert({
             "username":data['username'].strip(),
             "password":data['password'].strip()
+           
         })
     except Exception as e:
         response.status="409 Bad Request:"+str(e)
     # return 200 Success
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'status':200, 'success': True})
+
+    
 
 if PYTHONANYWHERE:
     application = default_app()

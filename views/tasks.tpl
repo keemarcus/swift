@@ -11,8 +11,6 @@
   td {white-space: normal}
 </style>
 
-
-
 <div class="row col-lg-12">
   <!-- Today -->
   <div class="col-lg-4 pt-4" >
