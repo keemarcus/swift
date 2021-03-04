@@ -251,7 +251,9 @@ function formatCreatedDate(d){
   let month = d.substring(5,7);
   var date = new Date(year + '-' + month + '-' + day + 'T00:00:00');*/
  
+  console.log(d);
   date = new Date(d + 'T00:00:00');
+  console.log(date);
 
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
@@ -261,6 +263,7 @@ function formatCreatedDate(d){
   today = yyyy + '-' + mm + '-' + dd + 'T00:00:00';
 
   todaysDate = new Date(today);
+  console.log(todaysDate);
   
   // To calculate the time difference of two dates 
   var Difference_In_Time = todaysDate.getTime() - date.getTime(); 
