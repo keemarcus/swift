@@ -177,22 +177,24 @@ function save_edit(event) {
   if (user == null) {
     window.location.href = "./login"
   }
-  id = event.target.id.replace("save_edit-","");
-  console.log("desc to save = ",$("#input-" + id).val())
-  if ((id != "today") & (id != "tomorrow") & (id != "later")) {
-    api_update_task({'id':id, description:$("#input-" + id).val(), deadline:$("#newdeadline-" + id).val()},
+  else{
+    id = event.target.id.replace("save_edit-","");
+    console.log("desc to save = ",$("#input-" + id).val())
+    if ((id != "today") & (id != "tomorrow") & (id != "later")) {
+      api_update_task({'id':id, description:$("#input-" + id).val(), deadline:$("#newdeadline-" + id).val()},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
                       $("#current_input").val("")
                     } );
-  } else {
-    api_create_task({description:$("#input-" + id).val(), list:id, deadline:$("#newdeadline-" + id).val(), 'userId':sessionStorage.getItem("userid")},
+    } else {
+      api_create_task({description:$("#input-" + id).val(), list:id, deadline:$("#newdeadline-" + id).val(), 'userId':sessionStorage.getItem("userid")},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
                       $("#current_input").val("")
                     } );
+    }
   }
 }
 
