@@ -173,6 +173,10 @@ function edit_task(event) {
 
 function save_edit(event) {
   console.log("save item", event.target.id)
+  // If user is not logged in they are redirected to login page.
+  if (user == null) {
+    window.location.href = "./login"
+  }
   id = event.target.id.replace("save_edit-","");
   console.log("desc to save = ",$("#input-" + id).val())
   if ((id != "today") & (id != "tomorrow") & (id != "later")) {
