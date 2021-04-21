@@ -173,7 +173,7 @@ function edit_task(event) {
 
 function save_edit(event) {
   console.log("save item", event.target.id)
-  // If user is not logged in they are redirected to login page.
+  // If user is not logged in they are redirected to login page
   if (user == null) {
     window.location.href = "./login"
   }
