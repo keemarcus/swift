@@ -12,6 +12,7 @@
         <a id="registerButton" class="nav-item nav-link"  style="margin-right: 25px" href="./register" >Sign Up</a>
         <a id="logged-user" class="nav-item nav-link" hidden>Login</a>
         <a id="lout" class="nav-item nav-link" hidden  style="margin-right: 25px">Log Out</a>
+        
     </div>
   </div>
 </nav>
