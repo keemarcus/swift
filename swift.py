@@ -172,7 +172,14 @@ def create_user():
         for key in data.keys():
             assert key in ["username", "password"], f"Illegal key '{key}'"
         assert type(data['username']) is str, "Username is not a string."
-        assert type(data['password']) is str, "Password is not a string"
+        assert type(data['password']) is str, "Password is not a string."
+        assert len(data['password']) >= 8, "Password is too short."
+       #added following assertions to check for password requirements, not sure if they work. 
+        assert any(c.isdigit for c in str), "number"
+        assert any(c.isupper for c in str), "upper"
+        assert any(c.islower for c in str), "lower"
+
+
     except Exception as e:
         response.status="400 Bad Request:"+str(e)
         return
