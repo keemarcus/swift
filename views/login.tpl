@@ -59,6 +59,7 @@
                         else {
                             $("#failed").prop('hidden', false);
                             console.log("login failed");
+                            return;
                         }
                     });
                 }
