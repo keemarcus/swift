@@ -173,22 +173,28 @@ function edit_task(event) {
 
 function save_edit(event) {
   console.log("save item", event.target.id)
-  id = event.target.id.replace("save_edit-","");
-  console.log("desc to save = ",$("#input-" + id).val())
-  if ((id != "today") & (id != "tomorrow") & (id != "later")) {
-    api_update_task({'id':id, description:$("#input-" + id).val(), deadline:$("#newdeadline-" + id).val()},
+  // If user is not logged in they are redirected to login page
+  if (user == null) {
+    window.location.href = "./login"
+  }
+  else{
+    id = event.target.id.replace("save_edit-","");
+    console.log("desc to save = ",$("#input-" + id).val())
+    if ((id != "today") & (id != "tomorrow") & (id != "later")) {
+      api_update_task({'id':id, description:$("#input-" + id).val(), deadline:$("#newdeadline-" + id).val()},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
                       $("#current_input").val("")
                     } );
-  } else {
-    api_create_task({description:$("#input-" + id).val(), list:id, deadline:$("#newdeadline-" + id).val(), 'userId':sessionStorage.getItem("userid")},
+    } else {
+      api_create_task({description:$("#input-" + id).val(), list:id, deadline:$("#newdeadline-" + id).val(), 'userId':sessionStorage.getItem("userid")},
                     function(result) { 
                       console.log(result);
                       get_current_tasks();
                       $("#current_input").val("")
                     } );
+    }
   }
 }
 
@@ -287,13 +293,51 @@ function formatDeadlineDate(d){
 
 }
 
+function defaultDeadline(day){
+  today = new Date();
+  
+  // set month and year
+  var mm = today.getMonth()+1; //January is 0.
+  var yyyy = today.getFullYear();
+
+  // set proper date
+  if(day == 'today'){
+    var dd = today.getDate();
+  }else if (day == 'tomorrow'){
+    var dd = today.getDate() + 1;
+  }else if (day == 'later'){
+    var dd = today.getDate() + 2;
+  }
+
+  // rollover dates for end of months
+  if([1,3,5,7,8,10,12].includes(mm) && (dd > 31)){
+    dd -= 31;
+    mm += 1;
+  }else if([4,6,9,11].includes(mm) && (dd > 30)){
+    dd -= 30;
+    mm += 1;
+  }else if((mm == 2) && (yyyy % 4 == 0) && (dd > 29)){
+    dd -= 29;
+    mm += 1;
+  }else if((mm == 2) && (dd > 28)){
+    dd -= 28;
+    mm += 1;
+  }
+
+  // add leading zeros if needed
+  if(dd<10) dd='0'+dd;
+  if(mm<10) mm='0'+mm;
+
+  return (yyyy+'-'+mm+'-'+dd);
+}
+
+
 function display_task(x) {
   completed = x.completed ? " completed" : "";
   prio = x.prio ? "priority_high" : "crop_portrait";
   prio_color = x.prio ? "#00b300" : "#c2d9df";
 
   if ((x.id == "today") | (x.id == "tomorrow") | (x.id == "later")) {
-     
 
     t = '<tr id="task-'+x.id+'" class="task no-sort">' +
         '  <td colspan="2">' +
@@ -305,7 +349,7 @@ function display_task(x) {
         '           </div> '+
         '           <div class="mb-3" style="text-align: center"> '+
         '             <small><label for="newdeadline-'+x.id+'" style="display:inline-block"><b>Deadline:</b></label>' +
-        '             <input id="newdeadline-'+x.id+'" class="form-control" type="date" style="display:inline-block;  width:auto"/></small>' +
+        '             <input id="newdeadline-'+x.id+'" class="form-control" type="date" value=' + defaultDeadline(x.id) + ' style="display:inline-block;  width:auto"/></small>' +
         '           </div> '+
         '         </form>' +
         '      </span>' + 

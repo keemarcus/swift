@@ -54,6 +54,7 @@ def login():
 import json
 import dataset
 from datetime import date
+import hashlib
 
 taskbook_db = dataset.connect('sqlite:///taskbook.db')
 
@@ -177,17 +178,30 @@ def create_user():
         response.status="400 Bad Request:"+str(e)
         return
     try:
+        salt = os.urandom(16).hex()
+        key = hashlib.pbkdf2_hmac('sha256', data['password'].encode('utf-8'), bytearray.fromhex(salt), 100000).hex()
         task_table = taskbook_db.get_table('user')
         task_table.insert({
             "username":data['username'].strip(),
-            "password":data['password'].strip()
-           
+            "password":key.strip(),
+            "salt":salt.strip()
         })
     except Exception as e:
         response.status="409 Bad Request:"+str(e)
     # return 200 Success
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'status':200, 'success': True})
+
+@post('/api/hash')
+def hash_pw():
+    try:
+        data = request.json
+        print(data)
+        new_key = hashlib.pbkdf2_hmac('sha256', data['pass'].encode('utf-8'), bytearray.fromhex(data['salt']), 100000).hex()
+        return { "key": new_key }
+    except Exception as e:
+        response.status="400 Bad Request:"+str(e)
+        return
 
     
 

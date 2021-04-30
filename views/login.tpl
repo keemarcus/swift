@@ -34,18 +34,36 @@
             success:success_function});
     }
 
+    function api_hash(salt, pass, success_function){
+        console.log("fetching hash");
+        saltpassword = {salt, pass}
+        $.ajax({url:"/api/hash", type:"POST",
+            data:JSON.stringify(saltpassword),
+            contentType:"application/json; charset=utf-8",
+            success:success_function});
+    }
+
     function login(username, password){
         api_get_users(function(result) {
             for (const user of result.users){
-                if (username == user.username && password == user.password){
-                    create_session(user);
-                    console.log("logged in as: ", user);
-                    window.location.href = "./tasks";
-                    return;
+                if (username == user.username){ // && password == user.password){
+                    console.log("salt", user.salt, "pw", password);
+                    api_hash(user.salt, password, function(result){ // call api hashing function to check user password
+                        console.log(result.key)
+                        if (user.password == result.key){
+                            create_session(user);
+                            console.log("logged in as: ", user);
+                            window.location.href = "./tasks";
+                            return;
+                        }
+                        else {
+                            $("#failed").prop('hidden', false);
+                            console.log("login failed");
+                            return;
+                        }
+                    });
                 }
             }
-            $("#failed").prop('hidden', false);
-            console.log("login failed");
         });
     }
 
