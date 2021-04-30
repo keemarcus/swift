@@ -20,6 +20,6 @@ if __name__ == "__main__":
     user_table.drop()
     user_table = taskbook_db.create_table('user')
     user_table.insert_many([
-        {"username":"default", "password":"1234"},
-        {"username":"admin", "password":"admin"}
+        {"username":"default", "password":"24b5bcf5e8c233d466ad3364afe80195f4e208ea2cda4d31a48fe7e771c8d162", "salt":"d159a141a66560a848c6938d39eb8e4c"},
+        {"username":"admin", "password":"8b90f58c40b68752abe64d27e5e3e95c00478cc571c3349fd6dc8c6856fd6454", "salt":"2803dab17326f7adc82355b78d484c53"}
     ])
